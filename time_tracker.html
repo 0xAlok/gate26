@@ -1,0 +1,1406 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>GATE DA 2026 - Time Block Tracker</title>
+
+        <!-- Google Fonts: Libre Baskerville, Lora, IBM Plex Mono -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <!-- Lucide Icons -->
+        <script src="https://unpkg.com/lucide@latest"></script>
+
+        <script>
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ['"Libre Baskerville"', "serif"],
+                            serif: ['"Lora"', "serif"],
+                            mono: ['"IBM Plex Mono"', "monospace"],
+                        },
+                        colors: {
+                            border: "var(--border)",
+                            input: "var(--input)",
+                            ring: "var(--ring)",
+                            background: "var(--background)",
+                            foreground: "var(--foreground)",
+                            primary: {
+                                DEFAULT: "var(--primary)",
+                                foreground: "var(--primary-foreground)",
+                            },
+                            secondary: {
+                                DEFAULT: "var(--secondary)",
+                                foreground: "var(--secondary-foreground)",
+                            },
+                            destructive: {
+                                DEFAULT: "var(--destructive)",
+                                foreground: "var(--destructive-foreground)",
+                            },
+                            muted: {
+                                DEFAULT: "var(--muted)",
+                                foreground: "var(--muted-foreground)",
+                            },
+                            accent: {
+                                DEFAULT: "var(--accent)",
+                                foreground: "var(--accent-foreground)",
+                            },
+                            card: {
+                                DEFAULT: "var(--card)",
+                                foreground: "var(--card-foreground)",
+                            },
+                        },
+                        borderRadius: {
+                            lg: "var(--radius)",
+                            md: "calc(var(--radius) - 2px)",
+                            sm: "calc(var(--radius) - 4px)",
+                        },
+                    },
+                },
+            };
+        </script>
+
+        <style type="text/tailwindcss">
+            @layer base {
+                :root {
+                    --background: #f5f1e6;
+                    --foreground: #4a3f35;
+                    --card: #fffcf5;
+                    --card-foreground: #4a3f35;
+                    --primary: #a67c52;
+                    --primary-foreground: #ffffff;
+                    --secondary: #e2d8c3;
+                    --secondary-foreground: #5c4d3f;
+                    --muted: #ece5d8;
+                    --muted-foreground: #7d6b56;
+                    --accent: #d4c8aa;
+                    --accent-foreground: #4a3f35;
+                    --destructive: #b54a35;
+                    --destructive-foreground: #ffffff;
+                    --border: #dbd0ba;
+                    --input: #dbd0ba;
+                    --ring: #a67c52;
+                    --radius: 0.25rem;
+                }
+
+                .dark {
+                    --background: #2d2621;
+                    --foreground: #ece5d8;
+                    --card: #3a322c;
+                    --card-foreground: #ece5d8;
+                    --primary: #c0a080;
+                    --primary-foreground: #2d2621;
+                    --secondary: #4a4039;
+                    --secondary-foreground: #ece5d8;
+                    --muted: #312b26;
+                    --muted-foreground: #c5bcac;
+                    --accent: #59493e;
+                    --accent-foreground: #ece5d8;
+                    --destructive: #b54a35;
+                    --destructive-foreground: #ffffff;
+                    --border: #4a4039;
+                    --input: #4a4039;
+                    --ring: #c0a080;
+                }
+            }
+
+            @layer base {
+                * {
+                    @apply border-border;
+                }
+                body {
+                    @apply bg-background text-foreground font-sans;
+                }
+            }
+
+            /* Category Colors */
+            .cat-deep-work { background: #2d6a4f; color: white; }
+            .cat-light-study { background: #40916c; color: white; }
+            .cat-revision { background: #52b788; color: white; }
+            .cat-practice { background: #74c69d; color: #1b4332; }
+            .cat-break { background: #fca311; color: #14213d; }
+            .cat-distraction { background: #e63946; color: white; }
+            .cat-exercise { background: #4361ee; color: white; }
+            .cat-meals { background: #f4a261; color: #264653; }
+            .cat-sleep { background: #7b2cbf; color: white; }
+            .cat-other { background: #6c757d; color: white; }
+            .cat-empty { background: var(--muted); color: var(--muted-foreground); }
+
+            .dark .cat-empty { background: var(--muted); }
+
+            .time-block {
+                @apply cursor-pointer transition-all duration-150 hover:scale-105 hover:shadow-md relative;
+            }
+
+            .time-block.selected {
+                @apply ring-2 ring-ring ring-offset-2 ring-offset-background;
+            }
+
+            .time-block.has-topic::after {
+                content: '';
+                @apply absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full opacity-75;
+            }
+
+            /* Modal - using visibility for better compatibility */
+            .modal-backdrop {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 50;
+                visibility: visible;
+                opacity: 1;
+                transition: opacity 0.15s, visibility 0.15s;
+            }
+
+            .modal-backdrop.modal-hidden {
+                visibility: hidden !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+            }
+
+            .modal-content {
+                @apply bg-card rounded-lg shadow-xl p-6 w-full max-w-md mx-4 border border-border;
+            }
+
+            /* Hide scrollbar but allow scrolling */
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+
+            /* Keyboard key styling */
+            .kbd {
+                @apply inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-mono bg-muted border border-border rounded shadow-sm min-w-[1.5rem];
+            }
+        </style>
+    </head>
+    <body class="min-h-screen bg-background font-sans antialiased">
+        <div class="container mx-auto p-4 md:p-8 max-w-6xl">
+            <!-- Header -->
+            <header class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold tracking-tight flex items-center gap-3">
+                        <i data-lucide="clock" class="w-7 h-7 md:w-8 md:h-8"></i>
+                        <span>Time Block Tracker</span>
+                    </h1>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <!-- Exam Countdown -->
+                    <div class="hidden sm:flex items-center gap-2 bg-muted rounded-lg px-4 py-2 border border-border">
+                        <i data-lucide="target" class="w-4 h-4 text-primary"></i>
+                        <span class="text-sm font-medium">GATE DA 2026:</span>
+                        <span id="countdown" class="text-sm font-mono font-bold text-primary">--</span>
+                    </div>
+
+                    <button
+                        onclick="showShortcutsModal()"
+                        class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 shadow-sm"
+                        title="Keyboard shortcuts (?)"
+                    >
+                        <i data-lucide="keyboard" class="w-4 h-4"></i>
+                    </button>
+
+                    <button
+                        onclick="toggleTheme()"
+                        class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 shadow-sm"
+                        title="Toggle theme (D)"
+                    >
+                        <i data-lucide="sun" class="w-4 h-4 scale-100 dark:scale-0 transition-all absolute"></i>
+                        <i data-lucide="moon" class="w-4 h-4 scale-0 dark:scale-100 transition-all absolute"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Mobile Countdown -->
+            <div class="sm:hidden flex items-center justify-center gap-2 bg-muted rounded-lg px-4 py-3 border border-border mb-6">
+                <i data-lucide="target" class="w-4 h-4 text-primary"></i>
+                <span class="text-sm font-medium">GATE DA 2026:</span>
+                <span id="countdown-mobile" class="text-sm font-mono font-bold text-primary">--</span>
+            </div>
+
+            <!-- Date Navigation -->
+            <div class="flex items-center justify-between mb-6">
+                <button onclick="prevDay()" title="Previous day (←)" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input bg-background hover:bg-accent h-9 px-3 shadow-sm">
+                    <i data-lucide="chevron-left" class="w-4 h-4 mr-1"></i>
+                    <span class="hidden sm:inline">Prev</span>
+                </button>
+                
+                <div class="flex items-center gap-3">
+                    <button onclick="goToToday()" title="Go to today (T)" class="text-xs text-muted-foreground hover:text-foreground px-2 py-1 rounded hover:bg-muted transition-colors">Today</button>
+                    <h2 id="currentDateDisplay" class="text-lg md:text-xl font-bold font-serif"></h2>
+                </div>
+
+                <button onclick="nextDay()" title="Next day (→)" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input bg-background hover:bg-accent h-9 px-3 shadow-sm">
+                    <span class="hidden sm:inline">Next</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                </button>
+            </div>
+
+            <!-- Daily Stats Cards -->
+            <div class="grid gap-4 grid-cols-2 lg:grid-cols-4 mb-6">
+                <div class="rounded-lg border bg-card text-card-foreground shadow">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-medium text-muted-foreground">Deep Work</span>
+                            <div class="w-3 h-3 rounded-full cat-deep-work"></div>
+                        </div>
+                        <div class="text-xl font-bold font-mono" id="stat-deep-work">0h</div>
+                    </div>
+                </div>
+                <div class="rounded-lg border bg-card text-card-foreground shadow">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-medium text-muted-foreground">Total Study</span>
+                            <i data-lucide="book-open" class="w-4 h-4 text-primary"></i>
+                        </div>
+                        <div class="text-xl font-bold font-mono" id="stat-total-study">0h</div>
+                    </div>
+                </div>
+                <div class="rounded-lg border bg-card text-card-foreground shadow">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-medium text-muted-foreground">Distractions</span>
+                            <div class="w-3 h-3 rounded-full cat-distraction"></div>
+                        </div>
+                        <div class="text-xl font-bold font-mono" id="stat-distraction">0h</div>
+                    </div>
+                </div>
+                <div class="rounded-lg border bg-card text-card-foreground shadow">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-medium text-muted-foreground">Logged</span>
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-primary"></i>
+                        </div>
+                        <div class="text-xl font-bold font-mono" id="stat-logged">0/48</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="grid gap-6 lg:grid-cols-3">
+                <!-- Time Blocks Grid -->
+                <div class="lg:col-span-2 rounded-lg border bg-card text-card-foreground shadow">
+                    <div class="p-4 md:p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold font-serif">Time Blocks</h3>
+                            <span class="text-xs text-muted-foreground">48 blocks × 30 min</span>
+                        </div>
+                        
+                        <!-- Category Selector -->
+                        <div class="mb-4 p-3 bg-muted/50 rounded-lg border border-border/50">
+                            <p class="text-xs text-muted-foreground mb-2">Select category, then click blocks (study blocks will prompt for topic):</p>
+                            <div class="flex flex-wrap gap-2" id="categorySelector">
+                                <!-- Categories injected by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Time Grid - Split into sections -->
+                        <div class="space-y-3">
+                            <!-- Night (12 AM - 6 AM) -->
+                            <div>
+                                <div class="text-xs text-muted-foreground mb-1 font-mono">🌙 12:00 AM - 5:30 AM</div>
+                                <div class="grid grid-cols-6 sm:grid-cols-12 gap-1" id="timeGrid-night">
+                                </div>
+                            </div>
+                            <!-- Morning (6 AM - 12 PM) -->
+                            <div>
+                                <div class="text-xs text-muted-foreground mb-1 font-mono">🌅 6:00 AM - 11:30 AM</div>
+                                <div class="grid grid-cols-6 sm:grid-cols-12 gap-1" id="timeGrid-morning">
+                                </div>
+                            </div>
+                            <!-- Afternoon (12 PM - 6 PM) -->
+                            <div>
+                                <div class="text-xs text-muted-foreground mb-1 font-mono">☀️ 12:00 PM - 5:30 PM</div>
+                                <div class="grid grid-cols-6 sm:grid-cols-12 gap-1" id="timeGrid-afternoon">
+                                </div>
+                            </div>
+                            <!-- Evening (6 PM - 12 AM) -->
+                            <div>
+                                <div class="text-xs text-muted-foreground mb-1 font-mono">🌆 6:00 PM - 11:30 PM</div>
+                                <div class="grid grid-cols-6 sm:grid-cols-12 gap-1" id="timeGrid-evening">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="mt-4 pt-4 border-t border-border/50">
+                            <div class="flex flex-wrap gap-x-4 gap-y-2 text-xs">
+                                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-deep-work"></div> Deep Work</div>
+                                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-light-study"></div> Light Study</div>
+                                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-revision"></div> Revision</div>
+                                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-practice"></div> Practice</div>
+                                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-break"></div> Break</div>
+                                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-distraction"></div> Distraction</div>
+                                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-exercise"></div> Exercise</div>
+                                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-meals"></div> Meals</div>
+                                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-sleep"></div> Sleep</div>
+                                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-other"></div> Other</div>
+                            </div>
+                            <p class="text-xs text-muted-foreground mt-2">• White dot = has topic note</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Reflection -->
+                <div class="rounded-lg border bg-card text-card-foreground shadow">
+                    <div class="p-4 md:p-6">
+                        <h3 class="font-semibold font-serif mb-4 flex items-center gap-2">
+                            <i data-lucide="pencil" class="w-4 h-4"></i>
+                            Daily Reflection
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-sm font-medium text-muted-foreground block mb-2">What went well?</label>
+                                <textarea id="reflection-good" rows="2" class="w-full px-3 py-2 text-sm rounded-md border border-input bg-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none" placeholder="Wins, progress..."></textarea>
+                            </div>
+                            
+                            <div>
+                                <label class="text-sm font-medium text-muted-foreground block mb-2">What could be better?</label>
+                                <textarea id="reflection-improve" rows="2" class="w-full px-3 py-2 text-sm rounded-md border border-input bg-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none" placeholder="Improvements..."></textarea>
+                            </div>
+
+                            <div>
+                                <label class="text-sm font-medium text-muted-foreground block mb-2">Tomorrow's focus?</label>
+                                <textarea id="reflection-tomorrow" rows="2" class="w-full px-3 py-2 text-sm rounded-md border border-input bg-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none" placeholder="Key priorities..."></textarea>
+                            </div>
+
+                            <div>
+                                <label class="text-sm font-medium text-muted-foreground block mb-2">Day rating</label>
+                                <div class="flex gap-2" id="dayRating">
+                                    <!-- Stars injected by JS -->
+                                </div>
+                            </div>
+
+                            <button onclick="saveReflection()" class="w-full mt-2 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 shadow-sm">
+                                <i data-lucide="save" class="w-4 h-4 mr-2"></i>
+                                Save Reflection
+                            </button>
+                        </div>
+
+                        <!-- Today's Topics -->
+                        <div class="mt-6 pt-4 border-t border-border/50">
+                            <h4 class="text-sm font-medium text-muted-foreground mb-2">Topics covered today:</h4>
+                            <div id="todaysTopics" class="flex flex-wrap gap-1">
+                                <!-- Topics injected by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex flex-wrap gap-2 mt-6">
+                <button onclick="undo()" title="Undo (Ctrl+Z)" class="shadow-sm inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input bg-background hover:bg-accent h-9 px-4">
+                    <i data-lucide="undo-2" class="w-4 h-4 mr-2"></i> Undo
+                </button>
+                <button onclick="redo()" title="Redo (Ctrl+Y)" class="shadow-sm inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input bg-background hover:bg-accent h-9 px-4">
+                    <i data-lucide="redo-2" class="w-4 h-4 mr-2"></i> Redo
+                </button>
+                <button onclick="clearDay()" class="shadow-sm inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input bg-background hover:bg-accent h-9 px-4">
+                    <i data-lucide="eraser" class="w-4 h-4 mr-2"></i> Clear Day
+                </button>
+                <button onclick="prefillSleep()" title="Fill sleep blocks (S)" class="shadow-sm inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input bg-background hover:bg-accent h-9 px-4">
+                    <i data-lucide="moon" class="w-4 h-4 mr-2"></i> Fill Sleep
+                </button>
+                <button onclick="exportData()" class="shadow-sm inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input bg-background hover:bg-accent h-9 px-4">
+                    <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export
+                </button>
+                <button onclick="document.getElementById('importFile').click()" class="shadow-sm inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4">
+                    <i data-lucide="upload" class="w-4 h-4 mr-2"></i> Import
+                </button>
+                <input type="file" id="importFile" accept=".json" class="hidden" onchange="importData(event)" />
+            </div>
+
+            <!-- Progress Stats Section -->
+            <div class="mt-8 rounded-lg border bg-card text-card-foreground shadow">
+                <div class="p-4 md:p-6">
+                    <h3 class="font-semibold font-serif mb-4 flex items-center gap-2">
+                        <i data-lucide="trending-up" class="w-4 h-4"></i>
+                        Progress Stats
+                    </h3>
+                    
+                    <div class="grid gap-4 grid-cols-2 md:grid-cols-4">
+                        <div class="text-center p-3 bg-muted/30 rounded-lg">
+                            <div class="text-2xl font-bold font-mono text-primary" id="stats-weekly-hours">0h</div>
+                            <div class="text-xs text-muted-foreground">This Week</div>
+                        </div>
+                        <div class="text-center p-3 bg-muted/30 rounded-lg">
+                            <div class="text-2xl font-bold font-mono text-primary" id="stats-avg-daily">0h</div>
+                            <div class="text-xs text-muted-foreground">Daily Avg</div>
+                        </div>
+                        <div class="text-center p-3 bg-muted/30 rounded-lg">
+                            <div class="text-2xl font-bold font-mono text-primary" id="stats-streak">0</div>
+                            <div class="text-xs text-muted-foreground">Day Streak 🔥</div>
+                        </div>
+                        <div class="text-center p-3 bg-muted/30 rounded-lg">
+                            <div class="text-2xl font-bold font-mono text-primary" id="stats-total-hours">0h</div>
+                            <div class="text-xs text-muted-foreground">Total Study</div>
+                        </div>
+                    </div>
+
+                    <!-- All Topics Covered -->
+                    <div class="mt-6 pt-4 border-t border-border/50">
+                        <h4 class="text-sm font-medium text-muted-foreground mb-3">All topics studied (recent first):</h4>
+                        <div id="allTopics" class="flex flex-wrap gap-2 max-h-32 overflow-y-auto scrollbar-hide">
+                            <!-- Topics injected by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Overview -->
+            <div class="mt-6 rounded-lg border bg-card text-card-foreground shadow">
+                <div class="p-4 md:p-6">
+                    <h3 class="font-semibold font-serif mb-4 flex items-center gap-2">
+                        <i data-lucide="calendar-days" class="w-4 h-4"></i>
+                        Weekly Overview
+                    </h3>
+                    <div class="grid grid-cols-7 gap-2" id="weeklyOverview">
+                        <!-- Days injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic Input Modal -->
+        <div id="topicModal" class="modal-backdrop modal-hidden">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <h3 class="font-semibold font-serif mb-2">Add Topic</h3>
+                <p class="text-sm text-muted-foreground mb-4" id="modalTimeLabel">What did you study?</p>
+                <input type="text" id="topicInput" class="w-full px-3 py-2 text-sm rounded-md border border-input bg-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring mb-4" placeholder="e.g., Probability, Linear Algebra, ML basics..." autocomplete="off" />
+                <div class="flex gap-2">
+                    <button type="button" id="modalCancelBtn" class="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input bg-background hover:bg-accent h-9 px-4">
+                        Cancel
+                    </button>
+                    <button type="button" id="modalSaveBtn" class="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4">
+                        Save
+                    </button>
+                </div>
+                <p class="text-xs text-muted-foreground mt-3 text-center">Enter=save, Esc=cancel</p>
+            </div>
+        </div>
+
+        <!-- Keyboard Shortcuts Help -->
+        <div id="shortcutsModal" class="modal-backdrop modal-hidden">
+            <div class="modal-content max-w-lg" onclick="event.stopPropagation()">
+                <h3 class="font-semibold font-serif mb-4 flex items-center gap-2">
+                    <i data-lucide="keyboard" class="w-5 h-5"></i>
+                    Keyboard Shortcuts
+                </h3>
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                    <div class="space-y-2">
+                        <div class="font-medium text-muted-foreground">Navigation</div>
+                        <div><kbd class="kbd">←</kbd> Previous day</div>
+                        <div><kbd class="kbd">→</kbd> Next day</div>
+                        <div><kbd class="kbd">T</kbd> Go to today</div>
+                        <div><kbd class="kbd">?</kbd> Show shortcuts</div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="font-medium text-muted-foreground">Categories</div>
+                        <div><kbd class="kbd">1</kbd> Deep Work</div>
+                        <div><kbd class="kbd">2</kbd> Light Study</div>
+                        <div><kbd class="kbd">3</kbd> Revision</div>
+                        <div><kbd class="kbd">4</kbd> Practice</div>
+                        <div><kbd class="kbd">5</kbd> Break</div>
+                        <div><kbd class="kbd">6</kbd> Distraction</div>
+                        <div><kbd class="kbd">7</kbd> Exercise</div>
+                        <div><kbd class="kbd">8</kbd> Meals</div>
+                        <div><kbd class="kbd">9</kbd> Sleep</div>
+                        <div><kbd class="kbd">0</kbd> Other</div>
+                        <div><kbd class="kbd">X</kbd> Clear mode</div>
+                    </div>
+                    <div class="space-y-2 col-span-2 mt-2 pt-2 border-t border-border">
+                        <div class="font-medium text-muted-foreground">Actions</div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div><kbd class="kbd">Ctrl+Z</kbd> Undo</div>
+                            <div><kbd class="kbd">Ctrl+Y</kbd> Redo</div>
+                            <div><kbd class="kbd">S</kbd> Fill sleep blocks</div>
+                            <div><kbd class="kbd">D</kbd> Toggle dark mode</div>
+                            <div><kbd class="kbd">Esc</kbd> Close modal</div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="shortcutsGotItBtn" class="w-full mt-4 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4">
+                    Got it!
+                </button>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-card border border-border rounded-lg shadow-lg px-4 py-2 text-sm font-medium opacity-0 transition-opacity duration-300 pointer-events-none z-50">
+            <span id="toastMessage"></span>
+        </div>
+
+        <script>
+            // =====================
+            // Configuration
+            // =====================
+            const EXAM_DATE = new Date('2026-02-15T00:00:00');
+            const STORAGE_KEY = 'gate_time_tracker_v2';
+            const START_HOUR = 0; // 12:00 AM
+            const END_HOUR = 24; // 12:00 AM next day
+            const BLOCK_MINUTES = 30;
+            const BLOCKS_PER_DAY = (END_HOUR - START_HOUR) * (60 / BLOCK_MINUTES); // 48 blocks
+
+            // Sleep blocks: 11:30 PM (block 47) to 5:30 AM (block 11) = indices 47, 0-11
+            const SLEEP_BLOCKS = [47, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+            const CATEGORIES = [
+                { id: 'deep-work', label: 'Deep Work', class: 'cat-deep-work', isStudy: true },
+                { id: 'light-study', label: 'Light Study', class: 'cat-light-study', isStudy: true },
+                { id: 'revision', label: 'Revision', class: 'cat-revision', isStudy: true },
+                { id: 'practice', label: 'Practice', class: 'cat-practice', isStudy: true },
+                { id: 'break', label: 'Break', class: 'cat-break', isStudy: false },
+                { id: 'distraction', label: 'Distraction', class: 'cat-distraction', isStudy: false },
+                { id: 'exercise', label: 'Exercise', class: 'cat-exercise', isStudy: false },
+                { id: 'meals', label: 'Meals', class: 'cat-meals', isStudy: false },
+                { id: 'sleep', label: 'Sleep', class: 'cat-sleep', isStudy: false },
+                { id: 'other', label: 'Other', class: 'cat-other', isStudy: false },
+            ];
+
+            // =====================
+            // State
+            // =====================
+            let currentDate = new Date();
+            let selectedCategory = 'deep-work';
+            let data = {}; // { 'YYYY-MM-DD': { blocks: [{cat, topic}, ...], reflection: {...}, rating: N } }
+            let pendingBlockIndex = null; // For modal
+            let undoStack = []; // For undo/redo
+            let redoStack = [];
+            const MAX_UNDO = 50;
+
+            // =====================
+            // Utilities
+            // =====================
+            function formatDate(date) {
+                return date.toISOString().split('T')[0];
+            }
+
+            function formatDisplayDate(date) {
+                const options = { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' };
+                return date.toLocaleDateString('en-US', options);
+            }
+
+            function getTimeLabel(blockIndex) {
+                const totalMinutes = START_HOUR * 60 + blockIndex * BLOCK_MINUTES;
+                const hours = Math.floor(totalMinutes / 60) % 24;
+                const minutes = totalMinutes % 60;
+                const period = hours >= 12 ? 'PM' : 'AM';
+                const displayHours = hours > 12 ? hours - 12 : (hours === 0 ? 12 : hours);
+                return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
+            }
+
+            function getDaysUntilExam() {
+                const now = new Date();
+                now.setHours(0, 0, 0, 0);
+                const diff = EXAM_DATE - now;
+                return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+            }
+
+            function loadData() {
+                try {
+                    const stored = localStorage.getItem(STORAGE_KEY);
+                    if (stored) {
+                        data = JSON.parse(stored);
+                    }
+                    // Also try to migrate old data
+                    const oldData = localStorage.getItem('gate_time_tracker');
+                    if (oldData && !stored) {
+                        const old = JSON.parse(oldData);
+                        // Convert old format to new format
+                        Object.keys(old).forEach(key => {
+                            if (old[key].blocks) {
+                                data[key] = {
+                                    blocks: old[key].blocks.map(b => b ? { cat: b, topic: '' } : null),
+                                    reflection: old[key].reflection || { good: '', improve: '', tomorrow: '' },
+                                    rating: old[key].rating || 0
+                                };
+                            }
+                        });
+                        saveData();
+                    }
+                } catch (e) {
+                    console.error('Failed to load data:', e);
+                    data = {};
+                }
+            }
+
+            function saveData(addToUndo = true) {
+                try {
+                    if (addToUndo) {
+                        // Save current state for undo before making changes
+                        undoStack.push(JSON.stringify(data));
+                        if (undoStack.length > MAX_UNDO) undoStack.shift();
+                        redoStack = []; // Clear redo stack on new action
+                    }
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                } catch (e) {
+                    console.error('Failed to save data:', e);
+                }
+            }
+
+            function undo() {
+                if (undoStack.length === 0) {
+                    showToast('Nothing to undo');
+                    return;
+                }
+                redoStack.push(JSON.stringify(data));
+                data = JSON.parse(undoStack.pop());
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                renderAll();
+                showToast('↶ Undo');
+            }
+
+            function redo() {
+                if (redoStack.length === 0) {
+                    showToast('Nothing to redo');
+                    return;
+                }
+                undoStack.push(JSON.stringify(data));
+                data = JSON.parse(redoStack.pop());
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                renderAll();
+                showToast('↷ Redo');
+            }
+
+            function showToast(message, duration = 1500) {
+                const toast = document.getElementById('toast');
+                const toastMessage = document.getElementById('toastMessage');
+                toastMessage.textContent = message;
+                toast.classList.remove('opacity-0');
+                toast.classList.add('opacity-100');
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100');
+                    toast.classList.add('opacity-0');
+                }, duration);
+            }
+
+            function getDayData(date) {
+                const key = formatDate(date);
+                if (!data[key]) {
+                    // Initialize with sleep pre-filled
+                    const blocks = Array(BLOCKS_PER_DAY).fill(null);
+                    SLEEP_BLOCKS.forEach(i => {
+                        blocks[i] = { cat: 'sleep', topic: '' };
+                    });
+                    data[key] = {
+                        blocks: blocks,
+                        reflection: { good: '', improve: '', tomorrow: '' },
+                        rating: 0
+                    };
+                }
+                return data[key];
+            }
+
+            function isStudyCategory(catId) {
+                const cat = CATEGORIES.find(c => c.id === catId);
+                return cat && cat.isStudy;
+            }
+
+            // =====================
+            // Rendering
+            // =====================
+            function updateCountdown() {
+                const days = getDaysUntilExam();
+                const text = days === 0 ? 'Today!' : `${days} day${days !== 1 ? 's' : ''} left`;
+                document.getElementById('countdown').textContent = text;
+                const mobileEl = document.getElementById('countdown-mobile');
+                if (mobileEl) mobileEl.textContent = text;
+            }
+
+            function renderCategorySelector() {
+                const container = document.getElementById('categorySelector');
+                container.innerHTML = '';
+
+                CATEGORIES.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = `px-2 py-1 text-xs rounded font-medium transition-all ${cat.class} ${selectedCategory === cat.id ? 'ring-2 ring-ring ring-offset-1' : 'opacity-70 hover:opacity-100'}`;
+                    btn.textContent = cat.label;
+                    btn.onclick = () => {
+                        selectedCategory = cat.id;
+                        renderCategorySelector();
+                    };
+                    container.appendChild(btn);
+                });
+
+                // Add clear option
+                const clearBtn = document.createElement('button');
+                clearBtn.className = `px-2 py-1 text-xs rounded font-medium transition-all cat-empty ${selectedCategory === null ? 'ring-2 ring-ring ring-offset-1' : 'opacity-70 hover:opacity-100'}`;
+                clearBtn.textContent = '✕ Clear';
+                clearBtn.onclick = () => {
+                    selectedCategory = null;
+                    renderCategorySelector();
+                };
+                container.appendChild(clearBtn);
+            }
+
+            function renderTimeGridSection(containerId, startBlock, endBlock) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                const dayData = getDayData(currentDate);
+
+                for (let i = startBlock; i < endBlock; i++) {
+                    const block = document.createElement('div');
+                    const blockData = dayData.blocks[i];
+                    const category = blockData?.cat || null;
+                    const topic = blockData?.topic || '';
+                    const cat = CATEGORIES.find(c => c.id === category);
+                    const catClass = cat ? cat.class : 'cat-empty';
+                    
+                    block.className = `time-block aspect-square rounded-sm flex items-center justify-center text-xs font-mono ${catClass} ${topic ? 'has-topic' : ''}`;
+                    block.title = `${getTimeLabel(i)} - ${cat ? cat.label : 'Empty'}${topic ? '\n📝 ' + topic : ''}`;
+                    block.innerHTML = `<span class="hidden sm:inline text-[10px] opacity-75">${getTimeLabel(i).split(' ')[0]}</span>`;
+                    
+                    block.onclick = () => handleBlockClick(i);
+                    container.appendChild(block);
+                }
+            }
+
+            function renderTimeGrid() {
+                renderTimeGridSection('timeGrid-night', 0, 12);      // 12 AM - 5:30 AM
+                renderTimeGridSection('timeGrid-morning', 12, 24);   // 6 AM - 11:30 AM
+                renderTimeGridSection('timeGrid-afternoon', 24, 36); // 12 PM - 5:30 PM
+                renderTimeGridSection('timeGrid-evening', 36, 48);   // 6 PM - 11:30 PM
+            }
+
+            function handleBlockClick(blockIndex) {
+                const dayData = getDayData(currentDate);
+                
+                if (selectedCategory === null) {
+                    // Clear the block
+                    dayData.blocks[blockIndex] = null;
+                    saveData();
+                    renderTimeGrid();
+                    updateStats();
+                    renderTodaysTopics();
+                } else if (isStudyCategory(selectedCategory)) {
+                    // Show topic input modal
+                    pendingBlockIndex = blockIndex;
+                    document.getElementById('modalTimeLabel').textContent = `${getTimeLabel(blockIndex)} - ${CATEGORIES.find(c => c.id === selectedCategory).label}`;
+                    document.getElementById('topicInput').value = dayData.blocks[blockIndex]?.topic || '';
+                    document.getElementById('topicModal').classList.remove('modal-hidden');
+                    document.getElementById('topicInput').focus();
+                } else {
+                    // Non-study category, just set it
+                    dayData.blocks[blockIndex] = { cat: selectedCategory, topic: '' };
+                    saveData();
+                    renderTimeGrid();
+                    updateStats();
+                }
+            }
+
+            function confirmTopicModal() {
+                if (pendingBlockIndex === null) return;
+                
+                const dayData = getDayData(currentDate);
+                const topic = document.getElementById('topicInput').value.trim();
+                
+                dayData.blocks[pendingBlockIndex] = {
+                    cat: selectedCategory,
+                    topic: topic
+                };
+                
+                saveData();
+                forceCloseTopicModal();
+                renderTimeGrid();
+                updateStats();
+                renderTodaysTopics();
+                renderProgressStats();
+                showToast(topic ? `✓ ${topic}` : '✓ Saved');
+            }
+
+            function cancelTopicModal() {
+                forceCloseTopicModal();
+            }
+
+            function forceCloseTopicModal() {
+                pendingBlockIndex = null;
+                const modal = document.getElementById('topicModal');
+                const input = document.getElementById('topicInput');
+                input.blur();
+                input.value = '';
+                modal.classList.add('modal-hidden');
+            }
+
+            function showShortcutsModal() {
+                document.getElementById('shortcutsModal').classList.remove('modal-hidden');
+                lucide.createIcons();
+            }
+
+            function closeShortcutsModal() {
+                document.getElementById('shortcutsModal').classList.add('modal-hidden');
+            }
+
+            function renderDayRating() {
+                const container = document.getElementById('dayRating');
+                container.innerHTML = '';
+                const dayData = getDayData(currentDate);
+
+                for (let i = 1; i <= 5; i++) {
+                    const star = document.createElement('button');
+                    const isFilled = i <= dayData.rating;
+                    star.className = `w-8 h-8 rounded transition-colors ${isFilled ? 'text-primary' : 'text-muted-foreground hover:text-primary/50'}`;
+                    star.innerHTML = `<i data-lucide="${isFilled ? 'star' : 'star'}" class="w-6 h-6 ${isFilled ? 'fill-current' : ''}"></i>`;
+                    star.onclick = () => {
+                        dayData.rating = i;
+                        saveData();
+                        renderDayRating();
+                        lucide.createIcons();
+                    };
+                    container.appendChild(star);
+                }
+                lucide.createIcons();
+            }
+
+            function renderReflection() {
+                const dayData = getDayData(currentDate);
+                document.getElementById('reflection-good').value = dayData.reflection.good || '';
+                document.getElementById('reflection-improve').value = dayData.reflection.improve || '';
+                document.getElementById('reflection-tomorrow').value = dayData.reflection.tomorrow || '';
+            }
+
+            function renderTodaysTopics() {
+                const container = document.getElementById('todaysTopics');
+                const dayData = getDayData(currentDate);
+                const topics = new Set();
+                
+                dayData.blocks.forEach(block => {
+                    if (block?.topic) {
+                        topics.add(block.topic);
+                    }
+                });
+
+                if (topics.size === 0) {
+                    container.innerHTML = '<span class="text-xs text-muted-foreground italic">No topics logged yet</span>';
+                    return;
+                }
+
+                container.innerHTML = '';
+                topics.forEach(topic => {
+                    const tag = document.createElement('span');
+                    tag.className = 'px-2 py-1 text-xs bg-primary/10 text-primary rounded-md';
+                    tag.textContent = topic;
+                    container.appendChild(tag);
+                });
+            }
+
+            function updateStats() {
+                const dayData = getDayData(currentDate);
+                const counts = {};
+                let logged = 0;
+                let totalStudy = 0;
+
+                CATEGORIES.forEach(cat => counts[cat.id] = 0);
+
+                dayData.blocks.forEach(block => {
+                    if (block?.cat) {
+                        counts[block.cat] = (counts[block.cat] || 0) + 1;
+                        logged++;
+                        if (isStudyCategory(block.cat)) {
+                            totalStudy++;
+                        }
+                    }
+                });
+
+                const toHours = (blocks) => {
+                    const hours = (blocks * BLOCK_MINUTES) / 60;
+                    return hours % 1 === 0 ? `${hours}h` : `${hours.toFixed(1)}h`;
+                };
+
+                document.getElementById('stat-deep-work').textContent = toHours(counts['deep-work'] || 0);
+                document.getElementById('stat-total-study').textContent = toHours(totalStudy);
+                document.getElementById('stat-distraction').textContent = toHours(counts['distraction'] || 0);
+                document.getElementById('stat-logged').textContent = `${logged}/${BLOCKS_PER_DAY}`;
+            }
+
+            function renderProgressStats() {
+                // Calculate weekly study hours
+                const today = new Date();
+                const weekStart = new Date(today);
+                weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+                
+                let weeklyBlocks = 0;
+                let totalBlocks = 0;
+                let daysWithStudy = [];
+                
+                // Get all unique topics
+                const allTopics = new Map(); // topic -> last date used
+                
+                Object.keys(data).forEach(dateKey => {
+                    const dayData = data[dateKey];
+                    let dayStudyBlocks = 0;
+                    
+                    dayData.blocks?.forEach(block => {
+                        if (block?.cat && isStudyCategory(block.cat)) {
+                            dayStudyBlocks++;
+                            totalBlocks++;
+                            
+                            // Check if in current week
+                            const blockDate = new Date(dateKey);
+                            if (blockDate >= weekStart && blockDate <= today) {
+                                weeklyBlocks++;
+                            }
+                            
+                            // Track topics
+                            if (block.topic) {
+                                allTopics.set(block.topic, dateKey);
+                            }
+                        }
+                    });
+                    
+                    if (dayStudyBlocks > 0) {
+                        daysWithStudy.push(dateKey);
+                    }
+                });
+
+                // Calculate streak
+                let streak = 0;
+                const sortedDays = daysWithStudy.sort().reverse();
+                if (sortedDays.length > 0) {
+                    const todayStr = formatDate(today);
+                    const yesterdayStr = formatDate(new Date(today.getTime() - 86400000));
+                    
+                    // Check if today or yesterday has study (to allow for ongoing day)
+                    if (sortedDays[0] === todayStr || sortedDays[0] === yesterdayStr) {
+                        streak = 1;
+                        for (let i = 1; i < sortedDays.length; i++) {
+                            const prevDate = new Date(sortedDays[i-1]);
+                            const currDate = new Date(sortedDays[i]);
+                            const diffDays = (prevDate - currDate) / 86400000;
+                            
+                            if (diffDays === 1) {
+                                streak++;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Calculate average
+                const daysTracked = Object.keys(data).length || 1;
+                const avgDaily = totalBlocks / daysTracked;
+
+                const toHours = (blocks) => {
+                    const hours = (blocks * BLOCK_MINUTES) / 60;
+                    return hours % 1 === 0 ? `${hours}h` : `${hours.toFixed(1)}h`;
+                };
+
+                document.getElementById('stats-weekly-hours').textContent = toHours(weeklyBlocks);
+                document.getElementById('stats-avg-daily').textContent = toHours(Math.round(avgDaily * 10) / 10);
+                document.getElementById('stats-streak').textContent = streak;
+                document.getElementById('stats-total-hours').textContent = toHours(totalBlocks);
+
+                // Render all topics
+                const allTopicsContainer = document.getElementById('allTopics');
+                if (allTopics.size === 0) {
+                    allTopicsContainer.innerHTML = '<span class="text-xs text-muted-foreground italic">No topics logged yet</span>';
+                } else {
+                    allTopicsContainer.innerHTML = '';
+                    // Sort by most recent
+                    const sortedTopics = [...allTopics.entries()].sort((a, b) => b[1].localeCompare(a[1]));
+                    sortedTopics.forEach(([topic, date]) => {
+                        const tag = document.createElement('span');
+                        tag.className = 'px-2 py-1 text-xs bg-primary/10 text-primary rounded-md';
+                        tag.textContent = topic;
+                        tag.title = `Last studied: ${date}`;
+                        allTopicsContainer.appendChild(tag);
+                    });
+                }
+            }
+
+            function renderWeeklyOverview() {
+                const container = document.getElementById('weeklyOverview');
+                container.innerHTML = '';
+
+                // Get start of current week (Sunday)
+                const weekStart = new Date(currentDate);
+                weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+
+                const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+                for (let i = 0; i < 7; i++) {
+                    const day = new Date(weekStart);
+                    day.setDate(day.getDate() + i);
+                    const dayKey = formatDate(day);
+                    const dayData = data[dayKey];
+                    
+                    const isToday = formatDate(day) === formatDate(new Date());
+                    const isSelected = formatDate(day) === formatDate(currentDate);
+                    
+                    // Calculate study hours for this day
+                    let studyBlocks = 0;
+                    if (dayData) {
+                        dayData.blocks?.forEach(block => {
+                            if (block?.cat && isStudyCategory(block.cat)) studyBlocks++;
+                        });
+                    }
+
+                    const studyHours = (studyBlocks * BLOCK_MINUTES) / 60;
+                    
+                    // Calculate fill percentage (max 12 hours = 100%)
+                    const fillPercent = Math.min(100, (studyHours / 12) * 100);
+
+                    const dayEl = document.createElement('div');
+                    dayEl.className = `relative rounded-lg border ${isSelected ? 'border-primary ring-2 ring-primary/30' : 'border-border'} ${isToday ? 'bg-primary/5' : 'bg-card'} p-2 text-center cursor-pointer hover:border-primary/50 transition-colors overflow-hidden`;
+                    dayEl.onclick = () => {
+                        currentDate = new Date(day);
+                        renderAll();
+                    };
+
+                    dayEl.innerHTML = `
+                        <div class="absolute bottom-0 left-0 right-0 bg-primary/20 transition-all" style="height: ${fillPercent}%"></div>
+                        <div class="relative">
+                            <div class="text-xs font-medium text-muted-foreground">${dayNames[i]}</div>
+                            <div class="text-sm font-bold font-mono">${day.getDate()}</div>
+                            <div class="text-xs font-mono ${studyHours > 0 ? 'text-primary' : 'text-muted-foreground'}">${studyHours > 0 ? studyHours.toFixed(1) + 'h' : '-'}</div>
+                            ${dayData?.rating ? `<div class="text-xs text-primary">★${dayData.rating}</div>` : ''}
+                        </div>
+                    `;
+
+                    container.appendChild(dayEl);
+                }
+            }
+
+            function renderAll() {
+                document.getElementById('currentDateDisplay').textContent = formatDisplayDate(currentDate);
+                updateCountdown();
+                renderCategorySelector();
+                renderTimeGrid();
+                renderDayRating();
+                renderReflection();
+                updateStats();
+                renderTodaysTopics();
+                renderProgressStats();
+                renderWeeklyOverview();
+                lucide.createIcons();
+            }
+
+            // =====================
+            // Actions
+            // =====================
+            function prevDay() {
+                currentDate.setDate(currentDate.getDate() - 1);
+                renderAll();
+            }
+
+            function nextDay() {
+                currentDate.setDate(currentDate.getDate() + 1);
+                renderAll();
+            }
+
+            function goToToday() {
+                currentDate = new Date();
+                renderAll();
+                showToast('📅 Today');
+            }
+
+            function prefillSleep() {
+                const dayData = getDayData(currentDate);
+                let filled = 0;
+                SLEEP_BLOCKS.forEach(i => {
+                    if (!dayData.blocks[i] || !dayData.blocks[i].cat) {
+                        dayData.blocks[i] = { cat: 'sleep', topic: '' };
+                        filled++;
+                    }
+                });
+                if (filled > 0) {
+                    saveData();
+                    renderAll();
+                }
+            }
+
+            function saveReflection() {
+                const dayData = getDayData(currentDate);
+                dayData.reflection = {
+                    good: document.getElementById('reflection-good').value,
+                    improve: document.getElementById('reflection-improve').value,
+                    tomorrow: document.getElementById('reflection-tomorrow').value,
+                };
+                saveData();
+                
+                // Show brief confirmation
+                const btn = event.target.closest('button');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 mr-2"></i>Saved!';
+                btn.disabled = true;
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    lucide.createIcons();
+                }, 1500);
+            }
+
+            function clearDay() {
+                if (!confirm('Clear all time blocks for this day? This cannot be undone.')) return;
+                const dayData = getDayData(currentDate);
+                dayData.blocks = Array(BLOCKS_PER_DAY).fill(null);
+                saveData();
+                renderAll();
+            }
+
+            function exportData() {
+                const exportObj = {
+                    app: 'GATE Time Block Tracker v2',
+                    exportDate: new Date().toISOString(),
+                    examDate: EXAM_DATE.toISOString(),
+                    data: data
+                };
+                const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `TimeBlockTracker_${formatDate(new Date())}.json`;
+                a.click();
+            }
+
+            function importData(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        const imported = JSON.parse(ev.target.result);
+                        if (imported.data) {
+                            data = { ...data, ...imported.data };
+                            saveData();
+                            renderAll();
+                            alert('✅ Data imported successfully!');
+                        } else {
+                            throw new Error('Invalid format');
+                        }
+                    } catch {
+                        alert('❌ Invalid file format.');
+                    }
+                };
+                reader.readAsText(file);
+                e.target.value = '';
+            }
+
+            function toggleTheme() {
+                const html = document.documentElement;
+                if (html.classList.contains('dark')) {
+                    html.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    html.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            }
+
+            function loadTheme() {
+                const theme = localStorage.getItem('theme');
+                if (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark');
+                } else if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                }
+            }
+
+            // =====================
+            // Init
+            // =====================
+            window.addEventListener('DOMContentLoaded', () => {
+                loadTheme();
+                loadData();
+                renderAll();
+                setupEventListeners();
+            });
+
+            function setupEventListeners() {
+                // Topic Modal button handlers
+                document.getElementById('modalSaveBtn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    confirmTopicModal();
+                });
+
+                document.getElementById('modalCancelBtn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    cancelTopicModal();
+                });
+
+                // Topic Modal input keyboard handling
+                document.getElementById('topicInput').addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        confirmTopicModal();
+                    } else if (e.key === 'Escape') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        cancelTopicModal();
+                    }
+                });
+
+                // Topic Modal backdrop click
+                document.getElementById('topicModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'topicModal') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        cancelTopicModal();
+                    }
+                });
+
+                // Shortcuts Modal button handler
+                document.getElementById('shortcutsGotItBtn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeShortcutsModal();
+                });
+
+                // Shortcuts Modal backdrop click
+                document.getElementById('shortcutsModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'shortcutsModal') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeShortcutsModal();
+                    }
+                });
+
+                // Auto-save reflection on change
+                ['reflection-good', 'reflection-improve', 'reflection-tomorrow'].forEach(id => {
+                    document.getElementById(id)?.addEventListener('input', () => {
+                        const dayData = getDayData(currentDate);
+                        dayData.reflection = {
+                            good: document.getElementById('reflection-good').value,
+                            improve: document.getElementById('reflection-improve').value,
+                            tomorrow: document.getElementById('reflection-tomorrow').value,
+                        };
+                        saveData(false); // Don't add reflection changes to undo stack
+                    });
+                });
+
+                // Global keyboard shortcuts
+                document.addEventListener('keydown', handleGlobalKeydown);
+            }
+
+            function handleGlobalKeydown(e) {
+                // Ignore if typing in an input/textarea
+                const activeEl = document.activeElement;
+                const isTyping = activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA';
+                
+                // Handle modal-specific escape
+                if (e.key === 'Escape') {
+                    const topicModal = document.getElementById('topicModal');
+                    const shortcutsModal = document.getElementById('shortcutsModal');
+                    
+                    if (!topicModal.classList.contains('modal-hidden')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        cancelTopicModal();
+                        return;
+                    }
+                    if (!shortcutsModal.classList.contains('modal-hidden')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeShortcutsModal();
+                        return;
+                    }
+                }
+
+                // Skip other shortcuts if typing
+                if (isTyping) return;
+
+                // Ctrl/Cmd shortcuts
+                if (e.ctrlKey || e.metaKey) {
+                    if (e.key === 'z' && !e.shiftKey) {
+                        e.preventDefault();
+                        undo();
+                        return;
+                    }
+                    if ((e.key === 'z' && e.shiftKey) || e.key === 'y') {
+                        e.preventDefault();
+                        redo();
+                        return;
+                    }
+                }
+
+                // Navigation
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevDay();
+                    showToast('◀ ' + formatDisplayDate(currentDate).split(',')[0]);
+                    return;
+                }
+                if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    nextDay();
+                    showToast('▶ ' + formatDisplayDate(currentDate).split(',')[0]);
+                    return;
+                }
+                if (e.key === 't' || e.key === 'T') {
+                    e.preventDefault();
+                    goToToday();
+                    showToast('📅 Today');
+                    return;
+                }
+
+                // Category selection (1-9, 0)
+                const catKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+                if (catKeys.includes(e.key)) {
+                    e.preventDefault();
+                    const index = e.key === '0' ? 9 : parseInt(e.key) - 1;
+                    if (index < CATEGORIES.length) {
+                        selectedCategory = CATEGORIES[index].id;
+                        renderCategorySelector();
+                        showToast(`${CATEGORIES[index].label}`);
+                    }
+                    return;
+                }
+
+                // Clear mode
+                if (e.key === 'x' || e.key === 'X') {
+                    e.preventDefault();
+                    selectedCategory = null;
+                    renderCategorySelector();
+                    showToast('✕ Clear mode');
+                    return;
+                }
+
+                // Fill sleep
+                if (e.key === 's' || e.key === 'S') {
+                    e.preventDefault();
+                    prefillSleep();
+                    showToast('🌙 Sleep filled');
+                    return;
+                }
+
+                // Toggle dark mode
+                if (e.key === 'd' || e.key === 'D') {
+                    e.preventDefault();
+                    toggleTheme();
+                    showToast(document.documentElement.classList.contains('dark') ? '🌙 Dark mode' : '☀️ Light mode');
+                    return;
+                }
+
+                // Show shortcuts
+                if (e.key === '?' || (e.key === '/' && e.shiftKey)) {
+                    e.preventDefault();
+                    showShortcutsModal();
+                    return;
+                }
+            }
+        </script>
+    </body>
+</html>
