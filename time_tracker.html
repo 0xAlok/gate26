@@ -125,7 +125,6 @@
 
             /* Category Colors */
             .cat-deep-work { background: #2d6a4f; color: white; }
-            .cat-light-study { background: #40916c; color: white; }
             .cat-revision { background: #52b788; color: white; }
             .cat-practice { background: #74c69d; color: #1b4332; }
             .cat-break { background: #fca311; color: #14213d; }
@@ -151,7 +150,7 @@
                 @apply absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full opacity-75;
             }
 
-            /* Modal - using visibility for better compatibility */
+            /* Modal */
             .modal-backdrop {
                 position: fixed;
                 inset: 0;
@@ -160,15 +159,10 @@
                 align-items: center;
                 justify-content: center;
                 z-index: 50;
-                visibility: visible;
-                opacity: 1;
-                transition: opacity 0.15s, visibility 0.15s;
             }
 
             .modal-backdrop.modal-hidden {
-                visibility: hidden !important;
-                opacity: 0 !important;
-                pointer-events: none !important;
+                display: none !important;
             }
 
             .modal-content {
@@ -305,7 +299,7 @@
                         
                         <!-- Category Selector -->
                         <div class="mb-4 p-3 bg-muted/50 rounded-lg border border-border/50">
-                            <p class="text-xs text-muted-foreground mb-2">Select category, then click blocks (study blocks will prompt for topic):</p>
+                            <p class="text-xs text-muted-foreground mb-2">Select category, then click blocks :</p>
                             <div class="flex flex-wrap gap-2" id="categorySelector">
                                 <!-- Categories injected by JS -->
                             </div>
@@ -343,7 +337,6 @@
                         <div class="mt-4 pt-4 border-t border-border/50">
                             <div class="flex flex-wrap gap-x-4 gap-y-2 text-xs">
                                 <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-deep-work"></div> Deep Work</div>
-                                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-light-study"></div> Light Study</div>
                                 <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-revision"></div> Revision</div>
                                 <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-practice"></div> Practice</div>
                                 <div class="flex items-center gap-1"><div class="w-3 h-3 rounded cat-break"></div> Break</div>
@@ -448,7 +441,7 @@
                         </div>
                         <div class="text-center p-3 bg-muted/30 rounded-lg">
                             <div class="text-2xl font-bold font-mono text-primary" id="stats-streak">0</div>
-                            <div class="text-xs text-muted-foreground">Day Streak 🔥</div>
+                            <div class="text-xs text-muted-foreground">Day Streak</div>
                         </div>
                         <div class="text-center p-3 bg-muted/30 rounded-lg">
                             <div class="text-2xl font-bold font-mono text-primary" id="stats-total-hours">0h</div>
@@ -516,15 +509,14 @@
                     <div class="space-y-2">
                         <div class="font-medium text-muted-foreground">Categories</div>
                         <div><kbd class="kbd">1</kbd> Deep Work</div>
-                        <div><kbd class="kbd">2</kbd> Light Study</div>
-                        <div><kbd class="kbd">3</kbd> Revision</div>
-                        <div><kbd class="kbd">4</kbd> Practice</div>
-                        <div><kbd class="kbd">5</kbd> Break</div>
-                        <div><kbd class="kbd">6</kbd> Distraction</div>
-                        <div><kbd class="kbd">7</kbd> Exercise</div>
-                        <div><kbd class="kbd">8</kbd> Meals</div>
-                        <div><kbd class="kbd">9</kbd> Sleep</div>
-                        <div><kbd class="kbd">0</kbd> Other</div>
+                        <div><kbd class="kbd">2</kbd> Revision</div>
+                        <div><kbd class="kbd">3</kbd> Practice</div>
+                        <div><kbd class="kbd">4</kbd> Break</div>
+                        <div><kbd class="kbd">5</kbd> Distraction</div>
+                        <div><kbd class="kbd">6</kbd> Exercise</div>
+                        <div><kbd class="kbd">7</kbd> Meals</div>
+                        <div><kbd class="kbd">8</kbd> Sleep</div>
+                        <div><kbd class="kbd">9</kbd> Other</div>
                         <div><kbd class="kbd">X</kbd> Clear mode</div>
                     </div>
                     <div class="space-y-2 col-span-2 mt-2 pt-2 border-t border-border">
@@ -565,7 +557,6 @@
 
             const CATEGORIES = [
                 { id: 'deep-work', label: 'Deep Work', class: 'cat-deep-work', isStudy: true },
-                { id: 'light-study', label: 'Light Study', class: 'cat-light-study', isStudy: true },
                 { id: 'revision', label: 'Revision', class: 'cat-revision', isStudy: true },
                 { id: 'practice', label: 'Practice', class: 'cat-practice', isStudy: true },
                 { id: 'break', label: 'Break', class: 'cat-break', isStudy: false },
@@ -643,14 +634,15 @@
                 }
             }
 
-            function saveData(addToUndo = true) {
+            // Call this BEFORE making changes to data
+            function saveUndoState() {
+                undoStack.push(JSON.stringify(data));
+                if (undoStack.length > MAX_UNDO) undoStack.shift();
+                redoStack = []; // Clear redo stack on new action
+            }
+
+            function saveData() {
                 try {
-                    if (addToUndo) {
-                        // Save current state for undo before making changes
-                        undoStack.push(JSON.stringify(data));
-                        if (undoStack.length > MAX_UNDO) undoStack.shift();
-                        redoStack = []; // Clear redo stack on new action
-                    }
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
                 } catch (e) {
                     console.error('Failed to save data:', e);
@@ -664,7 +656,7 @@
                 }
                 redoStack.push(JSON.stringify(data));
                 data = JSON.parse(undoStack.pop());
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                saveData();
                 renderAll();
                 showToast('↶ Undo');
             }
@@ -676,7 +668,7 @@
                 }
                 undoStack.push(JSON.stringify(data));
                 data = JSON.parse(redoStack.pop());
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                saveData();
                 renderAll();
                 showToast('↷ Redo');
             }
@@ -786,6 +778,7 @@
                 
                 if (selectedCategory === null) {
                     // Clear the block
+                    saveUndoState();
                     dayData.blocks[blockIndex] = null;
                     saveData();
                     renderTimeGrid();
@@ -800,6 +793,7 @@
                     document.getElementById('topicInput').focus();
                 } else {
                     // Non-study category, just set it
+                    saveUndoState();
                     dayData.blocks[blockIndex] = { cat: selectedCategory, topic: '' };
                     saveData();
                     renderTimeGrid();
@@ -813,6 +807,7 @@
                 const dayData = getDayData(currentDate);
                 const topic = document.getElementById('topicInput').value.trim();
                 
+                saveUndoState();
                 dayData.blocks[pendingBlockIndex] = {
                     cat: selectedCategory,
                     topic: topic
@@ -860,6 +855,7 @@
                     star.className = `w-8 h-8 rounded transition-colors ${isFilled ? 'text-primary' : 'text-muted-foreground hover:text-primary/50'}`;
                     star.innerHTML = `<i data-lucide="${isFilled ? 'star' : 'star'}" class="w-6 h-6 ${isFilled ? 'fill-current' : ''}"></i>`;
                     star.onclick = () => {
+                        saveUndoState();
                         dayData.rating = i;
                         saveData();
                         renderDayRating();
@@ -1118,11 +1114,16 @@
                 let filled = 0;
                 SLEEP_BLOCKS.forEach(i => {
                     if (!dayData.blocks[i] || !dayData.blocks[i].cat) {
-                        dayData.blocks[i] = { cat: 'sleep', topic: '' };
                         filled++;
                     }
                 });
                 if (filled > 0) {
+                    saveUndoState();
+                    SLEEP_BLOCKS.forEach(i => {
+                        if (!dayData.blocks[i] || !dayData.blocks[i].cat) {
+                            dayData.blocks[i] = { cat: 'sleep', topic: '' };
+                        }
+                    });
                     saveData();
                     renderAll();
                 }
@@ -1151,11 +1152,13 @@
             }
 
             function clearDay() {
-                if (!confirm('Clear all time blocks for this day? This cannot be undone.')) return;
+                if (!confirm('Clear all time blocks for this day?')) return;
+                saveUndoState();
                 const dayData = getDayData(currentDate);
                 dayData.blocks = Array(BLOCKS_PER_DAY).fill(null);
                 saveData();
                 renderAll();
+                showToast('Day cleared');
             }
 
             function exportData() {
@@ -1181,6 +1184,7 @@
                     try {
                         const imported = JSON.parse(ev.target.result);
                         if (imported.data) {
+                            saveUndoState();
                             data = { ...data, ...imported.data };
                             saveData();
                             renderAll();
@@ -1287,7 +1291,7 @@
                             improve: document.getElementById('reflection-improve').value,
                             tomorrow: document.getElementById('reflection-tomorrow').value,
                         };
-                        saveData(false); // Don't add reflection changes to undo stack
+                        saveData(); // Don't add reflection changes to undo stack (no saveUndoState call)
                     });
                 });
 
