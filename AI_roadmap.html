@@ -378,6 +378,386 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Is This Roadmap Good Enough Section -->
+            <div class="rounded-lg border bg-card text-card-foreground shadow mt-8 overflow-hidden">
+                <div class="p-6 cursor-pointer" onclick="toggleRoadmapGuide()">
+                    <h2 class="text-xl font-bold mb-2 flex items-center gap-2">
+                        <i data-lucide="shield-question" class="w-5 h-5"></i>
+                        Is This Roadmap Good Enough?
+                        <span id="guideToggleIcon" class="ml-auto transition-transform">
+                            <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                        </span>
+                    </h2>
+                    <p class="text-sm text-muted-foreground">Click to read an honest, no-BS assessment of this roadmap. Perfect when you feel demotivated or have second thoughts.</p>
+                </div>
+                <div id="roadmapGuideContent" class="hidden border-t border-border/60">
+                    <div class="p-6 space-y-8">
+                        
+                        <!-- Intro -->
+                        <div class="career-card border-l-4 border-l-primary">
+                            <p class="text-lg font-medium mb-2">💡 Before You Read This...</p>
+                            <p class="text-muted-foreground">This isn't motivational fluff. It's an honest assessment of what this roadmap can and cannot do for you. Read this when you're questioning your path, feeling imposter syndrome, or need a reality check.</p>
+                        </div>
+
+                        <!-- What's Excellent -->
+                        <div>
+                            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                                <span class="text-green-500">✅</span> What's Excellent (You're Covered)
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-border">
+                                            <th class="text-left p-3 font-semibold">Area</th>
+                                            <th class="text-left p-3 font-semibold">Verdict</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-border/50">
+                                        <tr><td class="p-3 font-medium">Math Foundations</td><td class="p-3 text-muted-foreground">✅ Linear Algebra, Calculus, Probability, Info Theory - all here with quality resources (3Blue1Brown, StatQuest)</td></tr>
+                                        <tr><td class="p-3 font-medium">Core ML/DL</td><td class="p-3 text-muted-foreground">✅ Comprehensive - from basics to Transformers to LLMs</td></tr>
+                                        <tr><td class="p-3 font-medium">LLMs & GenAI</td><td class="p-3 text-muted-foreground">✅ Very current - RAG, LangChain, Vector DBs, Fine-tuning (LoRA/QLoRA)</td></tr>
+                                        <tr><td class="p-3 font-medium">MLOps</td><td class="p-3 text-muted-foreground">✅ Docker, FastAPI, MLflow, K8s, CI/CD - all industry essentials</td></tr>
+                                        <tr><td class="p-3 font-medium">Data Engineering</td><td class="p-3 text-muted-foreground">✅ Spark, Airflow, Kafka, dbt, Snowflake - solid coverage</td></tr>
+                                        <tr><td class="p-3 font-medium">Interview Prep</td><td class="p-3 text-muted-foreground">✅ DSA (150-200 LC problems), behavioral STAR, take-homes, salary negotiation</td></tr>
+                                        <tr><td class="p-3 font-medium">System Design</td><td class="p-3 text-muted-foreground">✅ Both general AND ML-specific system design with real problems</td></tr>
+                                        <tr><td class="p-3 font-medium">Production ML</td><td class="p-3 text-muted-foreground">✅ Feature stores, A/B testing, monitoring, debugging - rare in other roadmaps</td></tr>
+                                        <tr><td class="p-3 font-medium">Career Beyond Code</td><td class="p-3 text-muted-foreground">✅ Open source, building in public, freelancing - the stuff that actually differentiates</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Gaps -->
+                        <div>
+                            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                                <span class="text-yellow-500">⚠️</span> Gaps You Should Be Aware Of
+                            </h3>
+                            
+                            <h4 class="font-semibold mb-3">1. Missing Topics (Not deal-breakers, but worth noting)</h4>
+                            <div class="overflow-x-auto mb-6">
+                                <table class="w-full text-sm border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-border">
+                                            <th class="text-left p-3 font-semibold">Missing</th>
+                                            <th class="text-left p-3 font-semibold">Why It Matters</th>
+                                            <th class="text-left p-3 font-semibold">What To Do</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-border/50">
+                                        <tr>
+                                            <td class="p-3 font-medium">NLP Fundamentals</td>
+                                            <td class="p-3 text-muted-foreground">Tokenization, word embeddings, seq2seq before jumping to Transformers</td>
+                                            <td class="p-3"><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOSH4v6133s9LFPRHjEmbmJ" target="_blank" class="text-primary hover:underline">Stanford CS224N</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 font-medium">Time Series</td>
+                                            <td class="p-3 text-muted-foreground">Huge in finance, IoT, forecasting</td>
+                                            <td class="p-3"><a href="https://facebook.github.io/prophet/" target="_blank" class="text-primary hover:underline">Prophet Docs</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 font-medium">Reinforcement Learning</td>
+                                            <td class="p-3 text-muted-foreground">Hot for robotics, games, RLHF</td>
+                                            <td class="p-3"><a href="https://www.youtube.com/playlist?list=PLqYmG7hTraZDM-OYHWgPebj2MfCFzFObQ" target="_blank" class="text-primary hover:underline">David Silver RL</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 font-medium">Computer Vision Depth</td>
+                                            <td class="p-3 text-muted-foreground">Just torchvision isn't enough for CV roles</td>
+                                            <td class="p-3"><a href="https://cs231n.stanford.edu/" target="_blank" class="text-primary hover:underline">Stanford CS231n</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 font-medium">W&B, DVC</td>
+                                            <td class="p-3 text-muted-foreground">Industry MLOps tools beyond MLflow</td>
+                                            <td class="p-3">Explore alongside MLflow</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h4 class="font-semibold mb-3">2. What No Roadmap Can Give You</h4>
+                            <div class="career-card border-l-4 border-l-red-500 mb-6">
+                                <p class="font-mono text-sm mb-3">📌 TRUTH BOMB: You can complete 100% of this roadmap and still not get hired.</p>
+                                <p class="font-semibold mb-2">The unfair advantages that actually matter:</p>
+                                <ul class="list-disc list-inside text-muted-foreground space-y-1">
+                                    <li><strong>Referrals</strong> (70%+ of hires at FAANG)</li>
+                                    <li><strong>Prior industry experience</strong> (chicken-egg problem)</li>
+                                    <li><strong>Network effects</strong> (knowing someone who knows someone)</li>
+                                    <li><strong>Luck</strong> (right opportunity at right time)</li>
+                                </ul>
+                                <p class="mt-3 text-sm">The Career Playbook section helps with this, but be realistic.</p>
+                            </div>
+                        </div>
+
+                        <!-- Learning Order -->
+                        <div>
+                            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                                <i data-lucide="route" class="w-5 h-5"></i>
+                                3. Learning Order Matters!
+                            </h3>
+                            <p class="text-muted-foreground mb-4">The roadmap shows CATEGORIES, not ORDER. Here's my recommended sequence:</p>
+                            <div class="career-card font-mono text-sm space-y-2">
+                                <div class="flex items-center gap-2"><span class="text-primary">Month 1-2:</span> Python Mastery + SQL (Foundation)</div>
+                                <div class="text-muted-foreground pl-4">↓</div>
+                                <div class="flex items-center gap-2"><span class="text-primary">Month 2-3:</span> Mathematics for ML (Before touching ML!)</div>
+                                <div class="text-muted-foreground pl-4">↓</div>
+                                <div class="flex items-center gap-2"><span class="text-primary">Month 3-5:</span> Machine Learning + Feature Engineering</div>
+                                <div class="text-muted-foreground pl-4">↓</div>
+                                <div class="flex items-center gap-2"><span class="text-primary">Month 5-6:</span> Deep Learning (Now you have context)</div>
+                                <div class="text-muted-foreground pl-4">↓</div>
+                                <div class="flex items-center gap-2"><span class="text-primary">Month 6-7:</span> MLOps + Docker + FastAPI (Make it production-ready)</div>
+                                <div class="text-muted-foreground pl-4">↓</div>
+                                <div class="flex items-center gap-2"><span class="text-primary">Month 7-8:</span> Cloud (AWS/GCP) + Data Engineering (Scale it)</div>
+                                <div class="text-muted-foreground pl-4">↓</div>
+                                <div class="flex items-center gap-2"><span class="text-primary">Month 8-9:</span> LLMs & GenAI (The hot stuff)</div>
+                                <div class="text-muted-foreground pl-4">↓</div>
+                                <div class="flex items-center gap-2"><span class="text-primary">Month 9-10:</span> System Design + ML System Design (Senior-level thinking)</div>
+                                <div class="text-muted-foreground pl-4">↓</div>
+                                <div class="flex items-center gap-2"><span class="text-primary">Month 10-12:</span> DSA + Interview Prep (Grind time)</div>
+                                <div class="text-muted-foreground pl-4">↓</div>
+                                <div class="flex items-center gap-2"><span class="text-green-500">Ongoing:</span> Projects + Open Source + Building in Public</div>
+                            </div>
+                        </div>
+
+                        <!-- Time Reality -->
+                        <div>
+                            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                                <i data-lucide="clock" class="w-5 h-5"></i>
+                                4. Time Reality Check
+                            </h3>
+                            <div class="overflow-x-auto mb-4">
+                                <table class="w-full text-sm border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-border">
+                                            <th class="text-left p-3 font-semibold">Estimated Total Time</th>
+                                            <th class="text-left p-3 font-semibold">Reality</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-border/50">
+                                        <tr>
+                                            <td class="p-3">~50-60 weeks at full speed</td>
+                                            <td class="p-3 text-muted-foreground">You're looking at <strong>12-18 months</strong> with consistent effort</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3">Assumes 4-6 hours/day</td>
+                                            <td class="p-3 text-muted-foreground">If you work full-time, double it: <strong>2-3 years</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-muted-foreground italic">This is not a "quick path" - it's a comprehensive career transformation.</p>
+                        </div>
+
+                        <!-- Hireability Assessment -->
+                        <div>
+                            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                                <i data-lucide="briefcase" class="w-5 h-5"></i>
+                                🎯 Hiring Assessment by Role
+                            </h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-4 mb-6">
+                                <!-- MLE -->
+                                <div class="career-card">
+                                    <h4 class="font-semibold text-primary mb-2">Machine Learning Engineer</h4>
+                                    <div class="text-sm space-y-1 mb-3">
+                                        <p>✅ Python, ML fundamentals, Deep Learning, PyTorch</p>
+                                        <p>✅ MLOps basics, DSA, ML System Design</p>
+                                        <p>❌ Missing: Production experience, scale thinking</p>
+                                    </div>
+                                    <p class="text-xs text-muted-foreground"><strong>Verdict: 85% hireable</strong> for junior/mid MLE</p>
+                                    <p class="text-xs mt-1">✓ Junior at startup/mid-size | ⚠️ FAANG needs luck + strong DSA</p>
+                                </div>
+                                
+                                <!-- DE -->
+                                <div class="career-card">
+                                    <h4 class="font-semibold text-primary mb-2">Data Engineer</h4>
+                                    <div class="text-sm space-y-1 mb-3">
+                                        <p>✅ SQL (strong), Python, Cloud basics</p>
+                                        <p>✅ Spark, Airflow, Kafka mentioned</p>
+                                        <p>❌ Missing: Data modeling depth, more hands-on</p>
+                                    </div>
+                                    <p class="text-xs text-muted-foreground"><strong>Verdict: 70% hireable</strong> for junior DE</p>
+                                    <p class="text-xs mt-1">✓ Analyst→DE transition | Need Spark/Airflow projects</p>
+                                </div>
+                                
+                                <!-- AI Engineer -->
+                                <div class="career-card">
+                                    <h4 class="font-semibold text-primary mb-2">AI Engineer</h4>
+                                    <div class="text-sm space-y-1 mb-3">
+                                        <p>✅ LLMs & RAG (strong), LangChain, Vector DBs</p>
+                                        <p>✅ Fine-tuning, Hugging Face, Python & APIs</p>
+                                        <p>⚠️ Need: Cost optimization, evaluation frameworks</p>
+                                    </div>
+                                    <p class="text-xs text-muted-foreground"><strong>Verdict: 90% hireable</strong> for AI Engineer</p>
+                                    <p class="text-xs mt-1">✓ Hot market, fewer candidates | Ship something to users</p>
+                                </div>
+                                
+                                <!-- Solutions Architect -->
+                                <div class="career-card">
+                                    <h4 class="font-semibold text-primary mb-2">AI Solutions Architect</h4>
+                                    <div class="text-sm space-y-1 mb-3">
+                                        <p>✅ Technical breadth, ML System Design, Cloud</p>
+                                        <p>⚠️ Soft skills covered but need practice</p>
+                                        <p>❌ Missing: Enterprise patterns, stakeholder mgmt</p>
+                                    </div>
+                                    <p class="text-xs text-muted-foreground"><strong>Verdict: 60% hireable</strong> for Junior SA</p>
+                                    <p class="text-xs mt-1">Need 3-5 years enterprise experience for senior</p>
+                                </div>
+                            </div>
+
+                            <div class="career-card border-l-4 border-l-primary">
+                                <p class="font-semibold mb-2">Would I hire you after completing this roadmap?</p>
+                                <table class="w-full text-sm">
+                                    <tbody>
+                                        <tr><td class="py-1">Junior/Entry role at startup</td><td class="py-1 text-green-500 font-semibold">YES ✅</td></tr>
+                                        <tr><td class="py-1">Mid-level at mid-size company</td><td class="py-1 text-green-500 font-semibold">YES ✅ (with 1-2 solid projects)</td></tr>
+                                        <tr><td class="py-1">Junior at FAANG</td><td class="py-1 text-yellow-500 font-semibold">MAYBE ⚠️ (need strong DSA + luck)</td></tr>
+                                        <tr><td class="py-1">Senior anywhere</td><td class="py-1 text-red-500 font-semibold">NO ❌ (need 2-3 years experience)</td></tr>
+                                        <tr><td class="py-1">AI Engineer (any level)</td><td class="py-1 text-green-500 font-semibold">YES ✅ (market is desperate)</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- What's Missing from ANY Roadmap -->
+                        <div>
+                            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-500"></i>
+                                The Hard Truth: What No Roadmap Can Give You
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-border">
+                                            <th class="text-left p-3 font-semibold">Missing Element</th>
+                                            <th class="text-left p-3 font-semibold">Why It Matters</th>
+                                            <th class="text-left p-3 font-semibold">How to Get It</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-border/50">
+                                        <tr>
+                                            <td class="p-3 font-medium">Production scars</td>
+                                            <td class="p-3 text-muted-foreground">You learn more from one production outage than 10 courses</td>
+                                            <td class="p-3">Deploy something real, break it, fix it</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 font-medium">Code review experience</td>
+                                            <td class="p-3 text-muted-foreground">Understanding "good" code vs "working" code</td>
+                                            <td class="p-3">Open source contributions, team projects</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 font-medium">Ambiguity handling</td>
+                                            <td class="p-3 text-muted-foreground">Real problems don't come with clear requirements</td>
+                                            <td class="p-3">Freelance work, internships</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 font-medium">Collaboration</td>
+                                            <td class="p-3 text-muted-foreground">Can you work with PMs, designers, other engineers?</td>
+                                            <td class="p-3">Team hackathons, open source</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 font-medium">Domain knowledge</td>
+                                            <td class="p-3 text-muted-foreground">FinTech ≠ Healthcare ≠ E-commerce ML</td>
+                                            <td class="p-3">Pick an industry, go deep</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Final Verdict -->
+                        <div>
+                            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                                <i data-lucide="flame" class="w-5 h-5 text-orange-500"></i>
+                                🔥 My Final Verdict
+                            </h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-4 mb-6">
+                                <div class="career-card">
+                                    <h4 class="font-semibold mb-2">Is This Roadmap Complete?</h4>
+                                    <p class="text-3xl font-bold text-primary mb-2">85-90% ✅</p>
+                                    <p class="text-sm text-muted-foreground">This roadmap covers <strong>more than enough</strong> to make you competitive for MLE, Data Engineer, AI Engineer, and Solutions Architect roles. The missing 10-15% (time series, RL, deeper CV) are <strong>specializations</strong> you can add based on job requirements.</p>
+                                </div>
+                                
+                                <div class="career-card">
+                                    <h4 class="font-semibold mb-2">Will You Need Other Courses?</h4>
+                                    <p class="text-xl font-bold text-green-500 mb-2">No, but with caveats:</p>
+                                    <ul class="text-sm text-muted-foreground space-y-1">
+                                        <li>✅ You <strong>DON'T</strong> need to buy courses (Udemy, Coursera paid)</li>
+                                        <li>✅ The free resources here are <strong>high quality</strong> (Andrew Ng, StatQuest, 3B1B, freeCodeCamp)</li>
+                                        <li>⚠️ You <strong>MIGHT</strong> need to supplement with latest papers, company tech blogs, domain-specific knowledge</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="career-card border-l-4 border-l-orange-500 mb-6">
+                                <p class="font-semibold mb-2">The Brutal Honest Truth</p>
+                                <div class="font-mono text-sm bg-muted/50 p-4 rounded mb-3">
+                                    <p>📌 The roadmap is ~10% of success.</p>
+                                    <p class="ml-4">• Execution is 50%</p>
+                                    <p class="ml-4">• Networking is 20%</p>
+                                    <p class="ml-4">• Luck & timing is 20%</p>
+                                </div>
+                                <p class="font-semibold mb-2">What separates those who succeed:</p>
+                                <ol class="list-decimal list-inside text-muted-foreground space-y-1">
+                                    <li><strong>Actually finishing</strong> (most don't)</li>
+                                    <li><strong>Building publicly</strong> (GitHub, blog, Twitter)</li>
+                                    <li><strong>Contributing to open source</strong> (credibility)</li>
+                                    <li><strong>Mock interviews</strong> (real practice > tutorials)</li>
+                                    <li><strong>Applying aggressively</strong> (100+ applications is normal)</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <!-- Recommendations -->
+                        <div>
+                            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                                <i data-lucide="lightbulb" class="w-5 h-5 text-yellow-500"></i>
+                                💡 My Recommendations
+                            </h3>
+                            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                <div class="career-card text-center">
+                                    <p class="text-2xl mb-2">🚀</p>
+                                    <p class="font-semibold text-sm">Start a project in week 1</p>
+                                    <p class="text-xs text-muted-foreground">Don't wait until you "know enough"</p>
+                                </div>
+                                <div class="career-card text-center">
+                                    <p class="text-2xl mb-2">✍️</p>
+                                    <p class="font-semibold text-sm">Blog your journey</p>
+                                    <p class="text-xs text-muted-foreground">Even "I learned X today" posts build presence</p>
+                                </div>
+                                <div class="career-card text-center">
+                                    <p class="text-2xl mb-2">☁️</p>
+                                    <p class="font-semibold text-sm">Pick ONE cloud deeply</p>
+                                    <p class="text-xs text-muted-foreground">AWS or GCP, not both superficially</p>
+                                </div>
+                                <div class="career-card text-center">
+                                    <p class="text-2xl mb-2">💻</p>
+                                    <p class="font-semibold text-sm">LeetCode daily</p>
+                                    <p class="text-xs text-muted-foreground">Even 1 problem/day beats weekend cramming</p>
+                                </div>
+                                <div class="career-card text-center">
+                                    <p class="text-2xl mb-2">📤</p>
+                                    <p class="font-semibold text-sm">Apply before you feel ready</p>
+                                    <p class="text-xs text-muted-foreground">Interviews teach you what to study</p>
+                                </div>
+                                <div class="career-card text-center">
+                                    <p class="text-2xl mb-2">🎯</p>
+                                    <p class="font-semibold text-sm">Start applying at 50%</p>
+                                    <p class="text-xs text-muted-foreground">You'll fail first 5-10, that's learning</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Line -->
+                        <div class="career-card bg-gradient-to-r from-primary/10 to-transparent border-2 border-primary">
+                            <p class="text-lg font-bold mb-2">🎯 Bottom Line</p>
+                            <p class="text-muted-foreground">This roadmap is genuinely comprehensive and well-researched. If you execute diligently, you won't need to look elsewhere. The question isn't <em>"Is this roadmap good enough?"</em> — it's <strong>"Will you actually do the work?"</strong></p>
+                            <p class="mt-4 text-sm italic text-muted-foreground">Now stop reading motivational content and go write some code. 💪</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script>
@@ -1617,8 +1997,10 @@
                 totalTopics = 0;
 
                 categories.forEach((category, idx) => {
-                    const tabId = `tab-${idx}`;
-                    const panelId = `panel-${idx}`;
+                    // Use category name slug for stable IDs (Bug 1 fix)
+                    const categorySlug = category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                    const tabId = `tab-${categorySlug}`;
+                    const panelId = `panel-${categorySlug}`;
                     const isFirst = idx === 0;
 
                     // Tab button
@@ -1673,7 +2055,8 @@
                     const topics = roadmapData[category];
 
                     topics.forEach((item, topicIdx) => {
-                        const id = `${idx}-${topicIdx}`;
+                        // Use category slug for stable IDs across role filters (Bug 1 fix)
+                        const id = `${categorySlug}-${topicIdx}`;
                         totalTopics++;
 
                         const priorityClass = item.priority === 'high' ? 'priority-high' : 
@@ -1769,8 +2152,69 @@
                 }));
             }
 
+            // Migration: Convert old index-based IDs to new slug-based IDs
+            function migrateOldProgress() {
+                try {
+                    const data = JSON.parse(localStorage.getItem('ai_roadmap_progress') || '{}');
+                    if (!data.progress) return false;
+                    
+                    // Check if migration is needed (old format: complete-0-0, new format: complete-python-mastery-0)
+                    const ids = Object.keys(data.progress);
+                    const hasOldFormat = ids.some(id => {
+                        // Old format: (complete|practiced)-{number}-{number}
+                        return /^(complete|practiced)-\d+-\d+$/.test(id);
+                    });
+                    
+                    if (!hasOldFormat) return false; // Already migrated or fresh install
+                    
+                    console.log('Migrating old progress format to new slug-based format...');
+                    
+                    // Build index-to-slug mapping from roadmapData
+                    const categories = Object.keys(roadmapData);
+                    const indexToSlug = {};
+                    categories.forEach((category, idx) => {
+                        const slug = category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                        indexToSlug[idx] = slug;
+                    });
+                    
+                    // Migrate progress data
+                    const migratedProgress = {};
+                    Object.entries(data.progress).forEach(([id, checked]) => {
+                        // Match old format: (complete|practiced)-{categoryIndex}-{topicIndex}
+                        const oldMatch = id.match(/^(complete|practiced)-(\d+)-(\d+)$/);
+                        if (oldMatch) {
+                            const [, prefix, categoryIdx, topicIdx] = oldMatch;
+                            const slug = indexToSlug[parseInt(categoryIdx)];
+                            if (slug) {
+                                const newId = `${prefix}-${slug}-${topicIdx}`;
+                                migratedProgress[newId] = checked;
+                            }
+                        } else {
+                            // Keep non-roadmap IDs (like project steps) as-is
+                            migratedProgress[id] = checked;
+                        }
+                    });
+                    
+                    // Save migrated data
+                    localStorage.setItem('ai_roadmap_progress', JSON.stringify({
+                        progress: migratedProgress,
+                        migrated: true,
+                        migratedAt: new Date().toISOString()
+                    }));
+                    
+                    console.log('Migration complete!');
+                    return true;
+                } catch (e) {
+                    console.error('Migration failed:', e);
+                    return false;
+                }
+            }
+
             function loadProgress() {
                 try {
+                    // Run migration if needed (only runs once)
+                    migrateOldProgress();
+                    
                     const data = JSON.parse(localStorage.getItem('ai_roadmap_progress') || '{}');
                     Object.entries(data.progress || {}).forEach(([id, checked]) => {
                         const el = document.getElementById(id);
@@ -1813,8 +2257,30 @@
                 reader.onload = (ev) => {
                     try {
                         const data = JSON.parse(ev.target.result);
+                        
+                        // Build index-to-slug mapping for migration
+                        const categories = Object.keys(roadmapData);
+                        const indexToSlug = {};
+                        categories.forEach((category, idx) => {
+                            const slug = category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                            indexToSlug[idx] = slug;
+                        });
+                        
+                        // Import and migrate if needed
                         Object.entries(data.progress || {}).forEach(([id, checked]) => {
-                            const el = document.getElementById(id);
+                            let targetId = id;
+                            
+                            // Check if old format and migrate
+                            const oldMatch = id.match(/^(complete|practiced)-(\d+)-(\d+)$/);
+                            if (oldMatch) {
+                                const [, prefix, categoryIdx, topicIdx] = oldMatch;
+                                const slug = indexToSlug[parseInt(categoryIdx)];
+                                if (slug) {
+                                    targetId = `${prefix}-${slug}-${topicIdx}`;
+                                }
+                            }
+                            
+                            const el = document.getElementById(targetId);
                             if (el) el.checked = checked;
                         });
                         updateProgress();
@@ -1863,13 +2329,62 @@
                 }
             }
 
+            function toggleRoadmapGuide() {
+                const content = document.getElementById('roadmapGuideContent');
+                const icon = document.getElementById('guideToggleIcon');
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            }
+
+            // Update project progress display without re-rendering (Bug 2 fix)
+            function updateProjectProgress(projectIdx) {
+                const project = alternativeProjects[projectIdx];
+                if (!project) return;
+                
+                // Read from localStorage, not DOM - checkboxes don't exist when collapsed
+                const savedProgress = getSavedProgress();
+                const completedSteps = project.steps.filter((_, stepIdx) => {
+                    const checkboxId = `project-${projectIdx}-step-${stepIdx}`;
+                    return savedProgress[checkboxId] === true;
+                }).length;
+                const progress = Math.round((completedSteps / project.steps.length) * 100);
+                
+                // Update the progress badge
+                const projectCard = document.getElementById(`project-${projectIdx}`);
+                if (projectCard) {
+                    const progressBadge = projectCard.querySelector('.bg-primary\\/20');
+                    if (progressBadge) {
+                        progressBadge.textContent = `${progress}%`;
+                    }
+                    // Update the step counter text (only visible when expanded)
+                    const stepCounter = projectCard.querySelector('h4');
+                    if (stepCounter && stepCounter.textContent.includes('Step-by-Step')) {
+                        stepCounter.innerHTML = `<i data-lucide="list-checks" class="w-4 h-4"></i> Step-by-Step Implementation (${completedSteps}/${project.steps.length})`;
+                        lucide.createIcons();
+                    }
+                }
+            }
+
+            // Helper to get saved progress from localStorage (Bug 2 fix)
+            function getSavedProgress() {
+                try {
+                    const data = JSON.parse(localStorage.getItem('ai_roadmap_progress') || '{}');
+                    return data.progress || {};
+                } catch (e) {
+                    return {};
+                }
+            }
+
             function renderProjects() {
                 const projectsGrid = document.getElementById('projectsGrid');
+                const savedProgress = getSavedProgress(); // Get from localStorage, not DOM
+                
                 projectsGrid.innerHTML = alternativeProjects.map((project, idx) => {
                     const isExpanded = expandedProject === idx;
+                    // Calculate progress from localStorage instead of DOM (Bug 2 fix)
                     const completedSteps = project.steps.filter((_, stepIdx) => {
-                        const cb = document.getElementById ? document.getElementById(`project-${idx}-step-${stepIdx}`) : null;
-                        return cb && cb.checked;
+                        const checkboxId = `project-${idx}-step-${stepIdx}`;
+                        return savedProgress[checkboxId] === true;
                     }).length;
                     const progress = Math.round((completedSteps / project.steps.length) * 100);
                     
@@ -1902,7 +2417,7 @@
                             <div class="space-y-2">
                                 ${project.steps.map((step, stepIdx) => `
                                     <div class="step-item">
-                                        <input type="checkbox" id="project-${idx}-step-${stepIdx}" class="custom-checkbox mt-0.5" onchange="updateProgress()">
+                                        <input type="checkbox" id="project-${idx}-step-${stepIdx}" class="custom-checkbox mt-0.5" onchange="updateProgress(); updateProjectProgress(${idx});">
                                         <label for="project-${idx}-step-${stepIdx}" class="text-sm cursor-pointer flex-1">
                                             <span class="font-mono text-xs text-muted-foreground mr-2">${stepIdx + 1}.</span>
                                             ${step}
