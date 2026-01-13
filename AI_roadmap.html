@@ -550,7 +550,6 @@
                         <!-- Hireability Assessment -->
                         <div>
                             <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-                                <i data-lucide="briefcase" class="w-5 h-5"></i>
                                 <i data-lucide="target" class="w-5 h-5"></i> Hiring Assessment by Role
                             </h3>
                             
@@ -667,7 +666,6 @@
                         <!-- Final Verdict -->
                         <div>
                             <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-                                <i data-lucide="flame" class="w-5 h-5 text-orange-500"></i>
                                 <i data-lucide="flame" class="w-5 h-5 text-orange-500"></i> My Final Verdict
                             </h3>
                             
@@ -711,7 +709,6 @@
                         <!-- Recommendations -->
                         <div>
                             <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-                                <i data-lucide="lightbulb" class="w-5 h-5 text-yellow-500"></i>
                                 <i data-lucide="lightbulb" class="w-5 h-5 text-yellow-500"></i> My Recommendations
                             </h3>
                             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -860,7 +857,7 @@
                                     <p class="font-semibold">Yannic Kilcher</p>
                                     <p class="text-xs text-muted-foreground">Paper breakdowns with real critique. Research-focused.</p>
                                 </a>
-                                <a href="https://www.youtube.com/@baborucoding" target="_blank" class="career-card hover:border-primary transition-colors">
+                                <a href="https://www.youtube.com/@bycloudAI" target="_blank" class="career-card hover:border-primary transition-colors">
                                     <p class="font-semibold">bycloud</p>
                                     <p class="text-xs text-muted-foreground">Actual researcher. Paper summaries with context.</p>
                                 </a>
@@ -1193,8 +1190,8 @@
                     },
                     {
                         topic: "Advanced Python (Decorators, Generators, Context Managers)",
-                        video: "https://www.youtube.com/watch?v=MYQiTG0JuPU",
-                        videoLabel: "Tech With Tim - Advanced Python",
+                        video: "https://www.youtube.com/playlist?list=PLzMcBGfZo4-kwmIcMDdXSuy_wSqtU-xDP",
+                        videoLabel: "Tech With Tim - Expert Python",
                         text: "https://book.pythontips.com/en/latest/",
                         textLabel: "Python Tips Book",
                         time: "1.5 weeks",
@@ -1428,6 +1425,26 @@
                         tips: "MUST understand attention. This is the foundation of all modern AI (GPT, BERT, etc.)."
                     },
                     {
+                        topic: "Attention Mechanism Deep-Dive (Build from Scratch)",
+                        video: "https://www.youtube.com/watch?v=iDulhoQ2pro",
+                        videoLabel: "Attention is All You Need - Paper Walkthrough",
+                        text: "http://nlp.seas.harvard.edu/annotated-transformer/",
+                        textLabel: "Annotated Transformer (Harvard)",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "Implement Q, K, V matrices from scratch. Understand multi-head attention and positional encoding."
+                    },
+                    {
+                        topic: "GPT Architecture Internals",
+                        video: "https://www.youtube.com/watch?v=kCc8FmEb1nY",
+                        videoLabel: "Andrej Karpathy - Build GPT from Scratch",
+                        text: "https://github.com/karpathy/nanoGPT",
+                        textLabel: "nanoGPT - Minimal Implementation",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "2-hour masterclass by Karpathy. Build GPT from scratch to truly understand it."
+                    },
+                    {
                         topic: "Hugging Face Transformers Library",
                         video: "https://www.youtube.com/watch?v=QEaBAZQCtwE",
                         videoLabel: "Hugging Face Course",
@@ -1508,6 +1525,46 @@
                         time: "4-5 days",
                         priority: "medium",
                         tips: "Evaluation is hard for LLMs. Learn about hallucination detection and guardrails."
+                    },
+                    {
+                        topic: "Tokenization & Embeddings Deep-Dive",
+                        video: "https://www.youtube.com/watch?v=zduSFxRajkE",
+                        videoLabel: "Andrej Karpathy - Tokenization",
+                        text: "https://huggingface.co/learn/nlp-course/chapter6/5",
+                        textLabel: "BPE Algorithm Explained",
+                        time: "3-4 days",
+                        priority: "medium",
+                        tips: "Understand BPE, WordPiece, SentencePiece. Train custom tokenizer for domain-specific data."
+                    },
+                    {
+                        topic: "LLM Inference Optimization (Caching, Batching, KV Cache)",
+                        video: "https://huggingface.co/docs/transformers/main/en/llm_tutorial_optimization",
+                        videoLabel: "HF LLM Optimization Tutorial",
+                        text: "https://www.databricks.com/blog/llm-inference-performance-engineering-best-practices",
+                        textLabel: "Databricks LLM Inference Best Practices",
+                        time: "3-4 days",
+                        priority: "high",
+                        tips: "Learn KV cache, dynamic batching, quantization (INT8/INT4). vLLM for production serving."
+                    },
+                    {
+                        topic: "AI Agents & Multi-Agent Systems",
+                        video: "https://www.youtube.com/watch?v=lvQ96Ssesfk",
+                        videoLabel: "Sam Witteveen - LangGraph AI Agent Tutorial",
+                        text: "https://langchain-ai.github.io/langgraph/",
+                        textLabel: "LangGraph Documentation",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "ReAct pattern, tool use, function calling. LangGraph for complex agent workflows. Study AutoGen/CrewAI."
+                    },
+                    {
+                        topic: "Model Context Protocol (MCP) - Anthropic",
+                        video: "https://www.anthropic.com/news/model-context-protocol",
+                        videoLabel: "MCP Announcement (Anthropic)",
+                        text: "https://modelcontextprotocol.io/introduction",
+                        textLabel: "MCP Official Documentation",
+                        time: "4-5 days",
+                        priority: "high",
+                        tips: "New protocol by Anthropic for AI-tool integration. Build MCP servers for Claude/LLMs to access data sources."
                     }
                 ],
                 "MLOps & Deployment": [
@@ -1595,8 +1652,8 @@
                 "Cloud Platforms": [
                     {
                         topic: "AWS Fundamentals (EC2, S3, IAM)",
-                        video: "https://www.youtube.com/watch?v=ulprqHHWlng",
-                        videoLabel: "freeCodeCamp AWS",
+                        video: "https://www.youtube.com/watch?v=3hLmDS179YE",
+                        videoLabel: "freeCodeCamp - AWS Cloud Practitioner",
                         text: "https://aws.amazon.com/getting-started/",
                         textLabel: "AWS Getting Started",
                         time: "1.5 weeks",
@@ -1625,8 +1682,8 @@
                     },
                     {
                         topic: "Azure ML Basics",
-                        video: "https://www.youtube.com/watch?v=CtKwAkl3cKc",
-                        videoLabel: "Azure ML Tutorial",
+                        video: "https://www.youtube.com/watch?v=GBDSBInvz08",
+                        videoLabel: "Get Started with Azure ML",
                         text: "https://learn.microsoft.com/en-us/azure/machine-learning/",
                         textLabel: "Azure ML Documentation",
                         time: "4-5 days",
@@ -1999,8 +2056,8 @@
                 "Production ML (The Gap Filler)": [
                     {
                         topic: "Debugging ML in Production",
-                        video: "https://www.youtube.com/watch?v=dWhdRpOqVys",
-                        videoLabel: "ML Debugging Patterns",
+                        video: "https://www.youtube.com/watch?v=ORrStCArmP4",
+                        videoLabel: "Andrew Ng - Debugging ML Models",
                         text: "https://madewithml.com/courses/mlops/monitoring/",
                         textLabel: "Made With ML - Monitoring",
                         time: "1 week",
@@ -2009,8 +2066,8 @@
                     },
                     {
                         topic: "Feature Stores (Feast)",
-                        video: "https://www.youtube.com/watch?v=DaNv-Wf1jBs",
-                        videoLabel: "Feast Feature Store",
+                        video: "https://www.youtube.com/watch?v=8-j-cV89O3M",
+                        videoLabel: "Feature Store Beginner's Guide",
                         text: "https://docs.feast.dev/",
                         textLabel: "Feast Documentation",
                         time: "4-5 days",
@@ -2029,8 +2086,8 @@
                     },
                     {
                         topic: "Cost Optimization in ML",
-                        video: "https://www.youtube.com/watch?v=g1rkKCNZj30",
-                        videoLabel: "ML Cost Optimization",
+                        video: "https://www.youtube.com/watch?v=eOy46w-6AKE",
+                        videoLabel: "ML Cost Optimization Strategies",
                         text: "https://aws.amazon.com/blogs/machine-learning/",
                         textLabel: "AWS ML Blog",
                         time: "2-3 days",
@@ -2039,8 +2096,8 @@
                     },
                     {
                         topic: "ML Security & Privacy",
-                        video: "https://www.youtube.com/watch?v=y6jyrWmyUwc",
-                        videoLabel: "ML Security Basics",
+                        video: "https://www.youtube.com/watch?v=dN0hHzkP-ZI",
+                        videoLabel: "ML Security & Privacy Fundamentals",
                         text: "https://owasp.org/www-project-machine-learning-security-top-10/",
                         textLabel: "OWASP ML Security Top 10",
                         time: "2-3 days",
@@ -2259,6 +2316,30 @@
                         "Add inference tab for testing fine-tuned model",
                         "Implement model export and Hugging Face Hub upload",
                         "Containerize and deploy with GPU support"
+                    ]
+                },
+                {
+                    name: "Multi-Agent AI Research Assistant",
+                    description: "Build an autonomous multi-agent system using LangGraph where agents collaborate to research topics, summarize, and generate reports.",
+                    skills: ["LLMs", "Agents", "LangGraph", "Tool Use"],
+                    difficulty: "Advanced",
+                    time: "3-4 weeks",
+                    roles: ["AI Engineer", "Solutions Architect"],
+                    steps: [
+                        "Set up environment with langgraph, langchain, tavily-python (search API)",
+                        "Create Researcher Agent: web search tool, document retrieval",
+                        "Create Summarizer Agent: summarizes research findings",
+                        "Create Critic Agent: validates facts and checks sources",
+                        "Create Writer Agent: generates final formatted report",
+                        "Design LangGraph workflow: researcher → summarizer → critic → writer",
+                        "Implement agent communication protocol (shared state/memory)",
+                        "Add tool calling: web search, Wikipedia API, ArXiv search",
+                        "Build ReAct pattern for reasoning and action loop",
+                        "Implement human-in-the-loop checkpoints for validation",
+                        "Add conversation memory with Redis/SQLite",
+                        "Create Streamlit interface for topic input and agent monitoring",
+                        "Add MCP server integration for external data sources",
+                        "Deploy with Docker and FastAPI backend"
                     ]
                 },
                 {
