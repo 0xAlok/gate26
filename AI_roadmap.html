@@ -166,6 +166,47 @@
                 -ms-overflow-style: none;
                 scrollbar-width: none;
             }
+
+            .role-card {
+                @apply p-4 rounded-lg border cursor-pointer transition-all;
+                background-color: color-mix(in srgb, var(--muted) 50%, transparent);
+            }
+            .role-card:hover {
+                @apply shadow-md border-primary;
+            }
+            .role-card.active {
+                @apply border-primary ring-2;
+                background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+                --tw-ring-color: color-mix(in srgb, var(--primary) 50%, transparent);
+            }
+
+            .project-card {
+                @apply p-4 rounded-lg border cursor-pointer transition-all;
+                background-color: color-mix(in srgb, var(--muted) 50%, transparent);
+            }
+            .project-card:hover {
+                @apply shadow-md;
+            }
+            .project-card.expanded {
+                @apply border-primary;
+            }
+
+            .step-item {
+                @apply flex items-start gap-3 p-3 rounded-lg border;
+                background-color: color-mix(in srgb, var(--background) 50%, transparent);
+            }
+
+            .career-card {
+                @apply p-6 rounded-lg border;
+                background-color: color-mix(in srgb, var(--muted) 30%, transparent);
+            }
+
+            .career-resource {
+                @apply flex items-center gap-2 p-2 rounded bg-background border text-sm transition-colors;
+            }
+            .career-resource:hover {
+                background-color: color-mix(in srgb, var(--muted) 50%, transparent);
+            }
         </style>
     </head>
     <body class="min-h-screen bg-background font-sans antialiased">
@@ -196,32 +237,34 @@
             <!-- Target Roles Section -->
             <div class="rounded-lg border bg-card text-card-foreground shadow mb-8">
                 <div class="p-6">
-                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <h2 class="text-xl font-bold mb-2 flex items-center gap-2">
                         <i data-lucide="target" class="w-5 h-5"></i>
                         Target Roles & Salary Ranges (India/US)
                     </h2>
-                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div class="p-4 rounded-lg bg-muted/50 border">
+                    <p class="text-sm text-muted-foreground mb-4">Click a role to filter relevant categories. Click again to show all.</p>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4" id="rolesGrid">
+                        <div class="role-card" onclick="filterByRole('MLE')" data-role="MLE">
                             <h3 class="font-semibold text-primary">Machine Learning Engineer</h3>
                             <p class="text-sm text-muted-foreground mt-1">₹12-40 LPA / $120-200K</p>
                             <p class="text-xs mt-2">Build, deploy & optimize ML models at scale</p>
                         </div>
-                        <div class="p-4 rounded-lg bg-muted/50 border">
+                        <div class="role-card" onclick="filterByRole('DE')" data-role="DE">
                             <h3 class="font-semibold text-primary">Data Engineer</h3>
                             <p class="text-sm text-muted-foreground mt-1">₹10-35 LPA / $100-180K</p>
                             <p class="text-xs mt-2">Design data pipelines, warehouses & infrastructure</p>
                         </div>
-                        <div class="p-4 rounded-lg bg-muted/50 border">
+                        <div class="role-card" onclick="filterByRole('AIE')" data-role="AIE">
                             <h3 class="font-semibold text-primary">AI Engineer</h3>
                             <p class="text-sm text-muted-foreground mt-1">₹15-50 LPA / $130-220K</p>
                             <p class="text-xs mt-2">Implement AI solutions using LLMs, GenAI & deep learning</p>
                         </div>
-                        <div class="p-4 rounded-lg bg-muted/50 border">
+                        <div class="role-card" onclick="filterByRole('SA')" data-role="SA">
                             <h3 class="font-semibold text-primary">AI Solutions Architect</h3>
                             <p class="text-sm text-muted-foreground mt-1">₹25-70 LPA / $150-250K</p>
                             <p class="text-xs mt-2">Design end-to-end AI systems & lead technical strategy</p>
                         </div>
                     </div>
+                    <p class="text-xs text-muted-foreground mt-3" id="roleFilterStatus"></p>
                 </div>
             </div>
 
@@ -313,11 +356,25 @@
             <!-- Alternative Projects Section -->
             <div class="rounded-lg border bg-card text-card-foreground shadow mt-8">
                 <div class="p-6">
-                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <h2 class="text-xl font-bold mb-2 flex items-center gap-2">
                         <i data-lucide="lightbulb" class="w-5 h-5"></i>
                         Alternative Project Ideas
                     </h2>
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4" id="projectsGrid">
+                    <p class="text-sm text-muted-foreground mb-4">Click a project to see step-by-step implementation guide with progress tracking.</p>
+                    <div id="projectsGrid">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Career Playbook Section -->
+            <div class="rounded-lg border bg-card text-card-foreground shadow mt-8">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold mb-2 flex items-center gap-2">
+                        <i data-lucide="rocket" class="w-5 h-5"></i>
+                        Career Playbook: Beyond Courses
+                    </h2>
+                    <p class="text-sm text-muted-foreground mb-6">The things no course teaches but every employer values.</p>
+                    <div id="careerPlaybookContent">
                     </div>
                 </div>
             </div>
@@ -1109,6 +1166,100 @@
                         tips: "Feature stores, model registries, A/B testing infrastructure. Think about latency budgets."
                     }
                 ],
+                "Interview Prep & Hiring": [
+                    {
+                        topic: "ML Coding Interview Patterns",
+                        video: "https://www.youtube.com/watch?v=GwIo3gDZCVQ",
+                        videoLabel: "ML Interview Prep",
+                        text: "https://www.interviewquery.com/",
+                        textLabel: "Interview Query",
+                        time: "2 weeks",
+                        priority: "high",
+                        tips: "Practice implementing: gradient descent, k-means, decision tree from scratch. No libraries."
+                    },
+                    {
+                        topic: "Behavioral Interviews (STAR Method)",
+                        video: "https://www.youtube.com/watch?v=PJKYqLP6MRE",
+                        videoLabel: "Amazon Behavioral Guide",
+                        text: "https://www.amazon.jobs/en/landing_pages/in-person-interview",
+                        textLabel: "Amazon Leadership Principles",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "Prepare 8-10 stories covering: conflict, failure, leadership, ambiguity. Use STAR format."
+                    },
+                    {
+                        topic: "Take-Home ML Assignments",
+                        video: "https://www.youtube.com/watch?v=nMK94JlKRb4",
+                        videoLabel: "ML Take Home Tips",
+                        text: "https://github.com/alexeygrigorev/mlbookcamp-code",
+                        textLabel: "ML Bookcamp Projects",
+                        time: "Practice ongoing",
+                        priority: "high",
+                        tips: "Companies give take-homes. Practice: clean code, documentation, model evaluation, business thinking."
+                    },
+                    {
+                        topic: "Salary Negotiation",
+                        video: "https://www.youtube.com/watch?v=u9BoG1n1948",
+                        videoLabel: "Tech Salary Negotiation",
+                        text: "https://www.levels.fyi/",
+                        textLabel: "Levels.fyi Salaries",
+                        time: "2-3 days",
+                        priority: "medium",
+                        tips: "Never give first number. Research market rates. Get competing offers. Negotiate total comp, not just base."
+                    }
+                ],
+                "Production ML (The Gap Filler)": [
+                    {
+                        topic: "Debugging ML in Production",
+                        video: "https://www.youtube.com/watch?v=dWhdRpOqVys",
+                        videoLabel: "ML Debugging Patterns",
+                        text: "https://madewithml.com/courses/mlops/monitoring/",
+                        textLabel: "Made With ML - Monitoring",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "Silent failures are the worst. Learn logging, alerting, and how to trace bad predictions."
+                    },
+                    {
+                        topic: "Feature Stores (Feast)",
+                        video: "https://www.youtube.com/watch?v=DaNv-Wf1jBs",
+                        videoLabel: "Feast Feature Store",
+                        text: "https://docs.feast.dev/",
+                        textLabel: "Feast Documentation",
+                        time: "4-5 days",
+                        priority: "medium",
+                        tips: "Feature stores prevent training-serving skew. Online vs offline features. Point-in-time correctness."
+                    },
+                    {
+                        topic: "A/B Testing for ML",
+                        video: "https://www.youtube.com/watch?v=DUNk4GPZ9bw",
+                        videoLabel: "ML A/B Testing",
+                        text: "https://www.exp-platform.com/Documents/2017-08%20KDDTutorialPracticalGuide.pdf",
+                        textLabel: "Microsoft A/B Guide (PDF)",
+                        time: "3-4 days",
+                        priority: "high",
+                        tips: "Statistical significance, sample size, guardrail metrics. Don't ship without testing!"
+                    },
+                    {
+                        topic: "Cost Optimization in ML",
+                        video: "https://www.youtube.com/watch?v=g1rkKCNZj30",
+                        videoLabel: "ML Cost Optimization",
+                        text: "https://aws.amazon.com/blogs/machine-learning/",
+                        textLabel: "AWS ML Blog",
+                        time: "2-3 days",
+                        priority: "medium",
+                        tips: "Spot instances, model distillation, batching. $10K/month GPU bills are common - learn to optimize."
+                    },
+                    {
+                        topic: "ML Security & Privacy",
+                        video: "https://www.youtube.com/watch?v=y6jyrWmyUwc",
+                        videoLabel: "ML Security Basics",
+                        text: "https://owasp.org/www-project-machine-learning-security-top-10/",
+                        textLabel: "OWASP ML Security Top 10",
+                        time: "2-3 days",
+                        priority: "medium",
+                        tips: "Model inversion, data poisoning, adversarial attacks. Know the risks, especially for enterprise."
+                    }
+                ],
                 "Soft Skills & Career": [
                     {
                         topic: "Technical Communication",
@@ -1153,78 +1304,315 @@
                 ]
             };
 
+            // Role to Category Mapping
+            const roleCategories = {
+                MLE: ["Python Mastery", "SQL & Databases", "Machine Learning", "Deep Learning", "MLOps & Deployment", "Cloud Platforms", "DSA & Interview Prep", "ML System Design"],
+                DE: ["Python Mastery", "SQL & Databases", "Data Engineering", "Cloud Platforms", "DSA & Interview Prep"],
+                AIE: ["Python Mastery", "Machine Learning", "Deep Learning", "LLMs & GenAI", "MLOps & Deployment", "Cloud Platforms", "DSA & Interview Prep"],
+                SA: ["Python Mastery", "SQL & Databases", "Machine Learning", "Deep Learning", "LLMs & GenAI", "MLOps & Deployment", "Cloud Platforms", "ML System Design", "Soft Skills & Career"]
+            };
+
+            let currentRole = null;
+
             const alternativeProjects = [
                 {
-                    name: "Real-time Stock Price Predictor",
-                    description: "Build an LSTM/Transformer model to predict stock prices with live data streaming via Kafka, served through FastAPI.",
-                    skills: ["Deep Learning", "Kafka", "FastAPI", "Docker"],
-                    difficulty: "Advanced",
-                    roles: ["MLE", "AI Engineer"]
+                    name: "RAG-based Document QA System",
+                    description: "Create a chatbot that answers questions from your documents using LangChain, vector DB, and OpenAI/local LLM.",
+                    skills: ["LLMs", "Vector DBs", "LangChain", "FastAPI"],
+                    difficulty: "Intermediate",
+                    time: "2-3 weeks",
+                    roles: ["AI Engineer", "Solutions Architect"],
+                    steps: [
+                        "Set up Python environment with langchain, chromadb, openai packages",
+                        "Create document loader for PDFs/text files using LangChain",
+                        "Implement text chunking with RecursiveCharacterTextSplitter (chunk_size=1000)",
+                        "Generate embeddings using OpenAI or sentence-transformers",
+                        "Store embeddings in ChromaDB vector store",
+                        "Build retrieval chain with similarity search (k=4)",
+                        "Create prompt template with context and question placeholders",
+                        "Implement chat memory for conversation history",
+                        "Build FastAPI endpoints for chat and document upload",
+                        "Add Streamlit/Gradio frontend interface",
+                        "Containerize with Docker and docker-compose",
+                        "Deploy to cloud (AWS EC2 or Railway/Render)"
+                    ]
                 },
                 {
                     name: "Recommendation System",
                     description: "Build a Netflix-style recommendation engine using collaborative filtering and content-based methods with MLflow tracking.",
                     skills: ["ML", "SQL", "FastAPI", "MLflow"],
                     difficulty: "Intermediate",
-                    roles: ["MLE", "Data Engineer"]
-                },
-                {
-                    name: "RAG-based Document QA System",
-                    description: "Create a chatbot that answers questions from your documents using LangChain, vector DB, and OpenAI/local LLM.",
-                    skills: ["LLMs", "Vector DBs", "LangChain", "FastAPI"],
-                    difficulty: "Intermediate",
-                    roles: ["AI Engineer", "Solutions Architect"]
+                    time: "3-4 weeks",
+                    roles: ["MLE", "Data Engineer"],
+                    steps: [
+                        "Download MovieLens dataset and explore with pandas",
+                        "Design PostgreSQL schema for users, movies, ratings",
+                        "Implement data pipeline to load and clean data",
+                        "Build content-based filtering using TF-IDF on movie descriptions",
+                        "Implement collaborative filtering using matrix factorization (SVD)",
+                        "Create hybrid recommender combining both approaches",
+                        "Set up MLflow for experiment tracking",
+                        "Log hyperparameters, metrics (RMSE, MAP@K) to MLflow",
+                        "Build FastAPI REST endpoints for recommendations",
+                        "Implement user-based and item-based endpoints",
+                        "Add batch prediction job for pre-computing recommendations",
+                        "Deploy with Docker, set up MLflow model registry"
+                    ]
                 },
                 {
                     name: "End-to-End ML Pipeline on AWS",
                     description: "Design and deploy a complete ML pipeline using SageMaker, S3, Lambda, with CI/CD and monitoring.",
                     skills: ["AWS", "MLOps", "Docker", "Terraform"],
                     difficulty: "Advanced",
-                    roles: ["MLE", "Solutions Architect"]
+                    time: "4-5 weeks",
+                    roles: ["MLE", "Solutions Architect"],
+                    steps: [
+                        "Set up AWS account with IAM roles for SageMaker",
+                        "Create S3 buckets for raw data, processed data, and models",
+                        "Build data preprocessing script using SageMaker Processing",
+                        "Create training script with hyperparameter configuration",
+                        "Set up SageMaker training job with spot instances",
+                        "Implement model evaluation and validation step",
+                        "Register model in SageMaker Model Registry",
+                        "Create SageMaker endpoint for real-time inference",
+                        "Build Lambda function for API Gateway integration",
+                        "Set up CloudWatch alarms for model monitoring",
+                        "Create GitHub Actions workflow for CI/CD",
+                        "Write Terraform scripts for infrastructure as code",
+                        "Implement A/B testing with traffic shifting"
+                    ]
                 },
                 {
                     name: "Data Lakehouse with Delta Lake",
                     description: "Build a modern data lakehouse using Spark, Delta Lake, and Airflow for incremental data processing.",
                     skills: ["Spark", "Airflow", "SQL", "Delta Lake"],
                     difficulty: "Advanced",
-                    roles: ["Data Engineer"]
+                    time: "4-5 weeks",
+                    roles: ["Data Engineer"],
+                    steps: [
+                        "Set up local Spark environment with Delta Lake",
+                        "Design medallion architecture (Bronze, Silver, Gold layers)",
+                        "Create Bronze layer: raw data ingestion from CSV/JSON sources",
+                        "Implement Silver layer: data cleaning and deduplication",
+                        "Build Gold layer: aggregated business metrics tables",
+                        "Implement MERGE operations for incremental updates",
+                        "Add schema enforcement and evolution handling",
+                        "Set up time travel for data versioning",
+                        "Create Airflow DAG for orchestrating the pipeline",
+                        "Implement data quality checks with Great Expectations",
+                        "Add partitioning strategy for query optimization",
+                        "Build analytics views using Spark SQL",
+                        "Deploy to Databricks or EMR for production"
+                    ]
                 },
                 {
                     name: "Computer Vision Object Detection API",
                     description: "Train YOLOv8 for custom object detection, deploy with TorchServe/Triton, containerized with Docker.",
                     skills: ["Deep Learning", "PyTorch", "Docker", "Model Serving"],
                     difficulty: "Intermediate",
-                    roles: ["MLE", "AI Engineer"]
+                    time: "3-4 weeks",
+                    roles: ["MLE", "AI Engineer"],
+                    steps: [
+                        "Collect and annotate custom dataset using LabelImg/Roboflow",
+                        "Set up training environment with GPU (Colab/local)",
+                        "Install ultralytics and prepare data in YOLO format",
+                        "Train YOLOv8 model with transfer learning",
+                        "Evaluate model: mAP, precision, recall metrics",
+                        "Export model to ONNX format for deployment",
+                        "Set up TorchServe with custom handler",
+                        "Create model archive (.mar file) for TorchServe",
+                        "Build FastAPI wrapper for inference endpoint",
+                        "Implement image preprocessing and postprocessing",
+                        "Add batch inference capability",
+                        "Containerize with Docker and optimize image size",
+                        "Deploy to cloud with GPU instance"
+                    ]
                 },
                 {
-                    name: "Sentiment Analysis Dashboard",
-                    description: "Real-time Twitter/Reddit sentiment analysis with Kafka streaming, Spark processing, and Plotly dashboard.",
-                    skills: ["NLP", "Kafka", "Spark", "Visualization"],
+                    name: "Real-time Sentiment Dashboard",
+                    description: "Real-time Twitter/Reddit sentiment analysis with streaming, processing, and Plotly dashboard.",
+                    skills: ["NLP", "Streaming", "Python", "Visualization"],
                     difficulty: "Intermediate",
-                    roles: ["Data Engineer", "MLE"]
+                    time: "2-3 weeks",
+                    roles: ["Data Engineer", "MLE"],
+                    steps: [
+                        "Set up Reddit API credentials (PRAW library)",
+                        "Create data streaming script for subreddit comments",
+                        "Implement text preprocessing (cleaning, tokenization)",
+                        "Load pre-trained sentiment model (VADER or transformers)",
+                        "Build real-time sentiment scoring pipeline",
+                        "Set up SQLite/PostgreSQL for storing results",
+                        "Create aggregation logic (hourly, by topic)",
+                        "Build Plotly Dash dashboard layout",
+                        "Add real-time charts: sentiment over time, word clouds",
+                        "Implement topic filtering and date range selection",
+                        "Add webhook/email alerts for sentiment spikes",
+                        "Deploy dashboard to Render/Heroku"
+                    ]
                 },
                 {
                     name: "LLM Fine-tuning Platform",
                     description: "Build a platform to fine-tune LLMs using LoRA/QLoRA with custom datasets, with Gradio interface.",
                     skills: ["LLMs", "Hugging Face", "PyTorch", "Gradio"],
                     difficulty: "Advanced",
-                    roles: ["AI Engineer", "MLE"]
+                    time: "3-4 weeks",
+                    roles: ["AI Engineer", "MLE"],
+                    steps: [
+                        "Set up environment with transformers, peft, bitsandbytes",
+                        "Create data processing pipeline for instruction tuning format",
+                        "Implement dataset validation and cleaning",
+                        "Configure LoRA parameters (rank, alpha, target modules)",
+                        "Set up 4-bit quantization with QLoRA for memory efficiency",
+                        "Create training script with gradient checkpointing",
+                        "Implement training loop with wandb logging",
+                        "Add evaluation metrics (perplexity, BLEU if applicable)",
+                        "Build model merging script for LoRA weights",
+                        "Create Gradio interface for: dataset upload, config, training",
+                        "Add inference tab for testing fine-tuned model",
+                        "Implement model export and Hugging Face Hub upload",
+                        "Containerize and deploy with GPU support"
+                    ]
                 },
                 {
                     name: "Fraud Detection System",
                     description: "Build an end-to-end fraud detection system with feature store, model training, and real-time inference.",
-                    skills: ["ML", "Feature Engineering", "FastAPI", "Kafka"],
+                    skills: ["ML", "Feature Engineering", "FastAPI", "Streaming"],
                     difficulty: "Advanced",
-                    roles: ["MLE", "Data Engineer"]
+                    time: "4-5 weeks",
+                    roles: ["MLE", "Data Engineer"],
+                    steps: [
+                        "Download credit card fraud dataset from Kaggle",
+                        "Perform EDA: class imbalance analysis, feature distributions",
+                        "Engineer features: velocity, aggregations, time-based",
+                        "Set up simple feature store (Feast or custom Redis)",
+                        "Implement SMOTE/undersampling for imbalanced data",
+                        "Train multiple models: XGBoost, Random Forest, Neural Net",
+                        "Optimize for precision-recall tradeoff (business threshold)",
+                        "Implement model calibration for probability scores",
+                        "Build FastAPI endpoint for real-time scoring",
+                        "Add feature retrieval from feature store",
+                        "Implement rule-based fallbacks for edge cases",
+                        "Set up monitoring: prediction drift, feature drift",
+                        "Create alerting system for high-risk transactions"
+                    ]
                 }
             ];
+
+            // Career Playbook Data
+            const careerPlaybook = {
+                openSource: {
+                    title: "🌟 Contributing to Open Source ML Projects",
+                    description: "Open source contributions are the fastest way to build credibility and learn from real codebases.",
+                    projects: [
+                        { name: "Hugging Face Transformers", url: "https://github.com/huggingface/transformers", description: "Add new models, fix bugs, improve docs. Huge community, great for beginners." },
+                        { name: "scikit-learn", url: "https://github.com/scikit-learn/scikit-learn", description: "Classic ML library. Good first issues labeled. Strict code quality = great learning." },
+                        { name: "LangChain", url: "https://github.com/langchain-ai/langchain", description: "Hot LLM framework. Fast-moving, lots of integration opportunities." },
+                        { name: "MLflow", url: "https://github.com/mlflow/mlflow", description: "MLOps tool. Good for learning production ML practices." },
+                        { name: "FastAPI", url: "https://github.com/tiangolo/fastapi", description: "Not ML-specific but essential for ML APIs. Great docs to contribute to." }
+                    ],
+                    steps: [
+                        "Star and watch the repo, read CONTRIBUTING.md thoroughly",
+                        "Set up local development environment following their guide",
+                        "Start with 'good first issue' or 'documentation' labels",
+                        "Read existing PRs to understand code style and review process",
+                        "Make small, focused PRs - one issue per PR",
+                        "Be responsive to review feedback, iterate quickly",
+                        "Graduate to harder issues after 2-3 merged PRs"
+                    ],
+                    resources: [
+                        { name: "First Contributions Guide", url: "https://github.com/firstcontributions/first-contributions" },
+                        { name: "How to Contribute to Open Source", url: "https://opensource.guide/how-to-contribute/" }
+                    ]
+                },
+                buildInPublic: {
+                    title: "📢 Building in Public",
+                    description: "Document your learning journey. It builds your brand, helps others, and attracts opportunities.",
+                    platforms: [
+                        { name: "Twitter/X", tip: "Share daily learnings, project updates, insights. Use relevant hashtags (#MachineLearning, #100DaysOfCode)" },
+                        { name: "LinkedIn", tip: "Weekly project updates, career reflections. More professional tone, great for job visibility." },
+                        { name: "Dev.to / Hashnode", tip: "Technical blog posts. Tutorials get high engagement. SEO-friendly." },
+                        { name: "YouTube", tip: "Project walkthroughs, tutorials. High effort but highest ROI long-term." },
+                        { name: "GitHub", tip: "Well-documented READMEs, project showcases. Your portfolio lives here." }
+                    ],
+                    contentIdeas: [
+                        "🧵 Thread: What I learned building [project] this week",
+                        "📝 Blog: Step-by-step tutorial on [topic you just learned]",
+                        "🎥 Video: Code walkthrough of your latest project",
+                        "📊 Post: Comparison of [two tools/frameworks] with benchmarks",
+                        "💡 Thread: Mistakes I made and how I fixed them",
+                        "🔗 Share: Curated resources on [topic] with your commentary"
+                    ],
+                    resources: [
+                        { name: "swyx's Learn in Public", url: "https://www.swyx.io/learn-in-public" },
+                        { name: "Developer Blogging Guide", url: "https://www.freecodecamp.org/news/how-to-write-a-great-technical-blog-post/" }
+                    ]
+                },
+                freelancing: {
+                    title: "💼 Freelancing & Contract Work",
+                    description: "Get paid to learn. Real client projects teach more than any course.",
+                    platforms: [
+                        { name: "Upwork", url: "https://www.upwork.com", tip: "Best for ML/Data projects. Start with small jobs to build reviews." },
+                        { name: "Toptal", url: "https://www.toptal.com", tip: "Premium clients, higher rates. Requires screening test." },
+                        { name: "Fiverr", url: "https://www.fiverr.com", tip: "Good for productized services (data analysis, model training)." },
+                        { name: "Contra", url: "https://contra.com", tip: "No fees, portfolio-focused. Good for showcasing work." }
+                    ],
+                    tips: [
+                        "Start with lower rates to build reviews (first 5-10 jobs)",
+                        "Specialize: 'ML Engineer for NLP projects' > 'Data Scientist'",
+                        "Over-deliver on first projects for 5-star reviews",
+                        "Create templated proposals but personalize for each job",
+                        "Build a portfolio website showcasing past work",
+                        "Gradually increase rates as reviews accumulate",
+                        "Network with clients for referrals and long-term contracts"
+                    ],
+                    projectTypes: [
+                        "Data analysis and visualization dashboards",
+                        "ML model development for specific business problems",
+                        "Data pipeline setup and automation",
+                        "LLM/ChatGPT integration for businesses",
+                        "Technical writing and documentation"
+                    ]
+                },
+                internships: {
+                    title: "🎓 Landing Internships (Even Self-Taught)",
+                    description: "Internships aren't just for students. Many companies hire based on skills, not degrees.",
+                    strategies: [
+                        { title: "Apply Directly", description: "Use LinkedIn, company career pages, AngelList for startups. Startups are more open to non-traditional backgrounds." },
+                        { title: "Cold Email", description: "Find hiring managers on LinkedIn, send personalized emails with your portfolio. 2-3% response rate is normal." },
+                        { title: "Open Source → Internship", description: "Many companies hire contributors. Contribute to company's open source projects." },
+                        { title: "Competitions → Offers", description: "Kaggle competitions, hackathons. Winners often get interview offers." }
+                    ],
+                    applicationTips: [
+                        "Tailor resume for each application (keywords from job description)",
+                        "Include GitHub link prominently - it's your proof of work",
+                        "Write cover letters that tell a story, not repeat resume",
+                        "Follow up after 1 week if no response",
+                        "Prepare for technical interviews: DSA + ML concepts",
+                        "Practice system design even for internships at senior levels"
+                    ],
+                    resources: [
+                        { name: "Levels.fyi Internships", url: "https://www.levels.fyi/internships/" },
+                        { name: "LinkedIn Jobs", url: "https://www.linkedin.com/jobs/" },
+                        { name: "AngelList (Startups)", url: "https://angel.co/jobs" }
+                    ]
+                }
+            };
 
             let totalTopics = 0;
 
             function initApp() {
                 const tabsList = document.getElementById("tabsList");
                 const tabPanels = document.getElementById("tabPanels");
-                const categories = Object.keys(roadmapData);
+                
+                // Clear existing content
+                tabsList.innerHTML = '';
+                tabPanels.innerHTML = '';
+                
+                // Get categories, filtered by role if selected
+                let categories = Object.keys(roadmapData);
+                if (currentRole && roleCategories[currentRole]) {
+                    categories = categories.filter(cat => roleCategories[currentRole].includes(cat));
+                }
 
                 totalTopics = 0;
 
@@ -1463,13 +1851,39 @@
                 }
             }
 
+            let expandedProject = null;
+
+            function toggleProject(idx) {
+                expandedProject = expandedProject === idx ? null : idx;
+                renderProjects();
+                if (expandedProject !== null) {
+                    setTimeout(() => {
+                        document.getElementById(`project-${idx}`).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                }
+            }
+
             function renderProjects() {
                 const projectsGrid = document.getElementById('projectsGrid');
-                projectsGrid.innerHTML = alternativeProjects.map((project, idx) => `
-                    <div class="p-4 rounded-lg bg-muted/50 border hover:shadow-md transition-shadow">
+                projectsGrid.innerHTML = alternativeProjects.map((project, idx) => {
+                    const isExpanded = expandedProject === idx;
+                    const completedSteps = project.steps.filter((_, stepIdx) => {
+                        const cb = document.getElementById ? document.getElementById(`project-${idx}-step-${stepIdx}`) : null;
+                        return cb && cb.checked;
+                    }).length;
+                    const progress = Math.round((completedSteps / project.steps.length) * 100);
+                    
+                    return `
+                    <div id="project-${idx}" class="project-card mb-4 ${isExpanded ? 'expanded' : ''}" onclick="toggleProject(${idx})">
                         <div class="flex items-start justify-between mb-2">
-                            <h3 class="font-semibold text-primary">${project.name}</h3>
-                            <span class="text-xs px-2 py-1 rounded ${project.difficulty === 'Advanced' ? 'priority-high' : project.difficulty === 'Intermediate' ? 'priority-medium' : 'priority-low'}">${project.difficulty}</span>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="${isExpanded ? 'chevron-down' : 'chevron-right'}" class="w-4 h-4 text-muted-foreground"></i>
+                                <h3 class="font-semibold text-primary">${project.name}</h3>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-mono bg-primary/20 text-primary px-2 py-1 rounded">${progress}%</span>
+                                <span class="text-xs px-2 py-1 rounded ${project.difficulty === 'Advanced' ? 'priority-high' : project.difficulty === 'Intermediate' ? 'priority-medium' : 'priority-low'}">${project.difficulty}</span>
+                            </div>
                         </div>
                         <p class="text-sm text-muted-foreground mb-3">${project.description}</p>
                         <div class="flex flex-wrap gap-1 mb-3">
@@ -1479,8 +1893,194 @@
                             <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i>${project.time}</span>
                             <span class="flex items-center gap-1"><i data-lucide="briefcase" class="w-3 h-3"></i>${project.roles.join(', ')}</span>
                         </div>
+                        ${isExpanded ? `
+                        <div class="mt-4 pt-4 border-t" onclick="event.stopPropagation()">
+                            <h4 class="font-semibold mb-3 flex items-center gap-2">
+                                <i data-lucide="list-checks" class="w-4 h-4"></i>
+                                Step-by-Step Implementation (${completedSteps}/${project.steps.length})
+                            </h4>
+                            <div class="space-y-2">
+                                ${project.steps.map((step, stepIdx) => `
+                                    <div class="step-item">
+                                        <input type="checkbox" id="project-${idx}-step-${stepIdx}" class="custom-checkbox mt-0.5" onchange="updateProgress()">
+                                        <label for="project-${idx}-step-${stepIdx}" class="text-sm cursor-pointer flex-1">
+                                            <span class="font-mono text-xs text-muted-foreground mr-2">${stepIdx + 1}.</span>
+                                            ${step}
+                                        </label>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
                     </div>
-                `).join('');
+                `}).join('');
+                lucide.createIcons();
+                // Restore checkbox states after render
+                loadProgress();
+            }
+
+            function filterByRole(role) {
+                const roleCards = document.querySelectorAll('.role-card');
+                const statusEl = document.getElementById('roleFilterStatus');
+                
+                if (currentRole === role) {
+                    // Deselect - show all
+                    currentRole = null;
+                    roleCards.forEach(card => card.classList.remove('active'));
+                    statusEl.textContent = '';
+                } else {
+                    // Select role
+                    currentRole = role;
+                    roleCards.forEach(card => {
+                        if (card.dataset.role === role) {
+                            card.classList.add('active');
+                        } else {
+                            card.classList.remove('active');
+                        }
+                    });
+                    const roleNames = { MLE: 'Machine Learning Engineer', DE: 'Data Engineer', AIE: 'AI Engineer', SA: 'AI Solutions Architect' };
+                    statusEl.innerHTML = `<i data-lucide="filter" class="w-3 h-3 inline"></i> Showing categories for: <strong>${roleNames[role]}</strong>`;
+                    lucide.createIcons();
+                }
+                
+                // Re-render tabs with filtering
+                initApp();
+                loadProgress();
+            }
+
+            function renderCareerPlaybook() {
+                const container = document.getElementById('careerPlaybookContent');
+                container.innerHTML = `
+                    <!-- Open Source Section -->
+                    <div class="career-card mb-6">
+                        <h3 class="text-lg font-bold mb-2">${careerPlaybook.openSource.title}</h3>
+                        <p class="text-sm text-muted-foreground mb-4">${careerPlaybook.openSource.description}</p>
+                        
+                        <h4 class="font-semibold mb-2 text-sm">🎯 Beginner-Friendly ML Projects to Contribute:</h4>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-2 mb-4">
+                            ${careerPlaybook.openSource.projects.map(p => `
+                                <a href="${p.url}" target="_blank" class="career-resource">
+                                    <i data-lucide="github" class="w-4 h-4 shrink-0"></i>
+                                    <div>
+                                        <div class="font-medium">${p.name}</div>
+                                        <div class="text-xs text-muted-foreground">${p.description}</div>
+                                    </div>
+                                </a>
+                            `).join('')}
+                        </div>
+                        
+                        <h4 class="font-semibold mb-2 text-sm">📋 How to Make Your First Contribution:</h4>
+                        <ol class="list-decimal list-inside text-sm space-y-1 mb-4 text-muted-foreground">
+                            ${careerPlaybook.openSource.steps.map(s => `<li>${s}</li>`).join('')}
+                        </ol>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            ${careerPlaybook.openSource.resources.map(r => `
+                                <a href="${r.url}" target="_blank" class="text-xs bg-primary/20 text-primary px-3 py-1 rounded hover:bg-primary/30 transition-colors">
+                                    ${r.name} →
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <!-- Build in Public Section -->
+                    <div class="career-card mb-6">
+                        <h3 class="text-lg font-bold mb-2">${careerPlaybook.buildInPublic.title}</h3>
+                        <p class="text-sm text-muted-foreground mb-4">${careerPlaybook.buildInPublic.description}</p>
+                        
+                        <h4 class="font-semibold mb-2 text-sm">🌐 Where to Build in Public:</h4>
+                        <div class="grid md:grid-cols-2 gap-2 mb-4">
+                            ${careerPlaybook.buildInPublic.platforms.map(p => `
+                                <div class="career-resource">
+                                    <div>
+                                        <div class="font-medium">${p.name}</div>
+                                        <div class="text-xs text-muted-foreground">${p.tip}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <h4 class="font-semibold mb-2 text-sm">💡 Content Ideas That Work:</h4>
+                        <div class="grid md:grid-cols-2 gap-1 mb-4">
+                            ${careerPlaybook.buildInPublic.contentIdeas.map(c => `
+                                <div class="text-sm text-muted-foreground p-2 bg-background/50 rounded">${c}</div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            ${careerPlaybook.buildInPublic.resources.map(r => `
+                                <a href="${r.url}" target="_blank" class="text-xs bg-primary/20 text-primary px-3 py-1 rounded hover:bg-primary/30 transition-colors">
+                                    ${r.name} →
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <!-- Freelancing Section -->
+                    <div class="career-card mb-6">
+                        <h3 class="text-lg font-bold mb-2">${careerPlaybook.freelancing.title}</h3>
+                        <p class="text-sm text-muted-foreground mb-4">${careerPlaybook.freelancing.description}</p>
+                        
+                        <h4 class="font-semibold mb-2 text-sm">🔗 Best Platforms for ML/Data Freelancing:</h4>
+                        <div class="grid md:grid-cols-2 gap-2 mb-4">
+                            ${careerPlaybook.freelancing.platforms.map(p => `
+                                <a href="${p.url}" target="_blank" class="career-resource">
+                                    <i data-lucide="external-link" class="w-4 h-4 shrink-0"></i>
+                                    <div>
+                                        <div class="font-medium">${p.name}</div>
+                                        <div class="text-xs text-muted-foreground">${p.tip}</div>
+                                    </div>
+                                </a>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="font-semibold mb-2 text-sm">🎯 Pro Tips:</h4>
+                                <ul class="text-sm space-y-1 text-muted-foreground">
+                                    ${careerPlaybook.freelancing.tips.map(t => `<li class="flex items-start gap-2"><span class="text-primary">•</span>${t}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2 text-sm">📦 In-Demand Project Types:</h4>
+                                <ul class="text-sm space-y-1 text-muted-foreground">
+                                    ${careerPlaybook.freelancing.projectTypes.map(t => `<li class="flex items-start gap-2"><span class="text-primary">•</span>${t}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Internships Section -->
+                    <div class="career-card">
+                        <h3 class="text-lg font-bold mb-2">${careerPlaybook.internships.title}</h3>
+                        <p class="text-sm text-muted-foreground mb-4">${careerPlaybook.internships.description}</p>
+                        
+                        <h4 class="font-semibold mb-2 text-sm">🚀 Strategies That Work:</h4>
+                        <div class="grid md:grid-cols-2 gap-2 mb-4">
+                            ${careerPlaybook.internships.strategies.map(s => `
+                                <div class="career-resource">
+                                    <div>
+                                        <div class="font-medium">${s.title}</div>
+                                        <div class="text-xs text-muted-foreground">${s.description}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <h4 class="font-semibold mb-2 text-sm">✅ Application Tips:</h4>
+                        <ul class="text-sm space-y-1 text-muted-foreground mb-4">
+                            ${careerPlaybook.internships.applicationTips.map(t => `<li class="flex items-start gap-2"><span class="text-primary">•</span>${t}</li>`).join('')}
+                        </ul>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            ${careerPlaybook.internships.resources.map(r => `
+                                <a href="${r.url}" target="_blank" class="text-xs bg-primary/20 text-primary px-3 py-1 rounded hover:bg-primary/30 transition-colors">
+                                    ${r.name} →
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
                 lucide.createIcons();
             }
 
@@ -1489,6 +2089,7 @@
                 initApp();
                 loadProgress();
                 renderProjects();
+                renderCareerPlaybook();
             });
         </script>
     </body>
