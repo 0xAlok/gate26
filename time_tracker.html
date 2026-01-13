@@ -474,7 +474,7 @@
         </div>
 
         <!-- Topic Input Modal -->
-        <div id="topicModal" class="modal-backdrop modal-hidden" style="display:none" aria-hidden="true">
+        <div id="topicModal" class="modal-backdrop modal-hidden">
             <div class="modal-content" onclick="event.stopPropagation()">
                 <h3 class="font-semibold font-serif mb-2">Add Topic</h3>
                 <p class="text-sm text-muted-foreground mb-4" id="modalTimeLabel">What did you study?</p>
@@ -492,7 +492,7 @@
         </div>
 
         <!-- Keyboard Shortcuts Help -->
-        <div id="shortcutsModal" class="modal-backdrop modal-hidden" style="display:none" aria-hidden="true">
+        <div id="shortcutsModal" class="modal-backdrop modal-hidden">
             <div class="modal-content max-w-lg" onclick="event.stopPropagation()">
                 <h3 class="font-semibold font-serif mb-4 flex items-center gap-2">
                     <i data-lucide="keyboard" class="w-5 h-5"></i>
@@ -582,11 +582,7 @@
             // Utilities
             // =====================
             function formatDate(date) {
-                // Use local timezone, not UTC
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                return `${year}-${month}-${day}`;
+                return date.toISOString().split('T')[0];
             }
 
             function formatDisplayDate(date) {
@@ -793,10 +789,7 @@
                     pendingBlockIndex = blockIndex;
                     document.getElementById('modalTimeLabel').textContent = `${getTimeLabel(blockIndex)} - ${CATEGORIES.find(c => c.id === selectedCategory).label}`;
                     document.getElementById('topicInput').value = dayData.blocks[blockIndex]?.topic || '';
-                    const topicModal = document.getElementById('topicModal');
-                    topicModal.classList.remove('modal-hidden');
-                    topicModal.style.display = 'flex';
-                    topicModal.setAttribute('aria-hidden', 'false');
+                    document.getElementById('topicModal').classList.remove('modal-hidden');
                     document.getElementById('topicInput').focus();
                 } else {
                     // Non-study category, just set it
@@ -840,23 +833,15 @@
                 input.blur();
                 input.value = '';
                 modal.classList.add('modal-hidden');
-                modal.style.display = 'none';
-                modal.setAttribute('aria-hidden', 'true');
             }
 
             function showShortcutsModal() {
-                const modal = document.getElementById('shortcutsModal');
-                modal.classList.remove('modal-hidden');
-                modal.style.display = 'flex';
-                modal.setAttribute('aria-hidden', 'false');
+                document.getElementById('shortcutsModal').classList.remove('modal-hidden');
                 lucide.createIcons();
             }
 
             function closeShortcutsModal() {
-                const modal = document.getElementById('shortcutsModal');
-                modal.classList.add('modal-hidden');
-                modal.style.display = 'none';
-                modal.setAttribute('aria-hidden', 'true');
+                document.getElementById('shortcutsModal').classList.add('modal-hidden');
             }
 
             function renderDayRating() {

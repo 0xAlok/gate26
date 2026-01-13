@@ -1,0 +1,1495 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AI/ML Engineer Roadmap Tracker</title>
+
+        <!-- Google Fonts: Libre Baskerville, Lora, IBM Plex Mono -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <!-- Lucide Icons -->
+        <script src="https://unpkg.com/lucide@latest"></script>
+
+        <script>
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ['"Libre Baskerville"', "serif"],
+                            serif: ['"Lora"', "serif"],
+                            mono: ['"IBM Plex Mono"', "monospace"],
+                        },
+                        colors: {
+                            border: "var(--border)",
+                            input: "var(--input)",
+                            ring: "var(--ring)",
+                            background: "var(--background)",
+                            foreground: "var(--foreground)",
+                            primary: {
+                                DEFAULT: "var(--primary)",
+                                foreground: "var(--primary-foreground)",
+                            },
+                            secondary: {
+                                DEFAULT: "var(--secondary)",
+                                foreground: "var(--secondary-foreground)",
+                            },
+                            destructive: {
+                                DEFAULT: "var(--destructive)",
+                                foreground: "var(--destructive-foreground)",
+                            },
+                            muted: {
+                                DEFAULT: "var(--muted)",
+                                foreground: "var(--muted-foreground)",
+                            },
+                            accent: {
+                                DEFAULT: "var(--accent)",
+                                foreground: "var(--accent-foreground)",
+                            },
+                            popover: {
+                                DEFAULT: "var(--popover)",
+                                foreground: "var(--popover-foreground)",
+                            },
+                            card: {
+                                DEFAULT: "var(--card)",
+                                foreground: "var(--card-foreground)",
+                            },
+                        },
+                        borderRadius: {
+                            lg: "var(--radius)",
+                            md: "calc(var(--radius) - 2px)",
+                            sm: "calc(var(--radius) - 4px)",
+                        },
+                    },
+                },
+            };
+        </script>
+
+        <style type="text/tailwindcss">
+            @layer base {
+                :root {
+                    --background: #f5f1e6;
+                    --foreground: #4a3f35;
+                    --card: #fffcf5;
+                    --card-foreground: #4a3f35;
+                    --popover: #fffcf5;
+                    --popover-foreground: #4a3f35;
+                    --primary: #a67c52;
+                    --primary-foreground: #ffffff;
+                    --secondary: #e2d8c3;
+                    --secondary-foreground: #5c4d3f;
+                    --muted: #ece5d8;
+                    --muted-foreground: #7d6b56;
+                    --accent: #d4c8aa;
+                    --accent-foreground: #4a3f35;
+                    --destructive: #b54a35;
+                    --destructive-foreground: #ffffff;
+                    --border: #dbd0ba;
+                    --input: #dbd0ba;
+                    --ring: #a67c52;
+                    --radius: 0.25rem;
+                }
+
+                .dark {
+                    --background: #2d2621;
+                    --foreground: #ece5d8;
+                    --card: #3a322c;
+                    --card-foreground: #ece5d8;
+                    --popover: #3a322c;
+                    --popover-foreground: #ece5d8;
+                    --primary: #c0a080;
+                    --primary-foreground: #2d2621;
+                    --secondary: #4a4039;
+                    --secondary-foreground: #ece5d8;
+                    --muted: #312b26;
+                    --muted-foreground: #c5bcac;
+                    --accent: #59493e;
+                    --accent-foreground: #ece5d8;
+                    --destructive: #b54a35;
+                    --destructive-foreground: #ffffff;
+                    --border: #4a4039;
+                    --input: #4a4039;
+                    --ring: #c0a080;
+                }
+            }
+
+            @layer base {
+                * {
+                    @apply border-border;
+                }
+                body {
+                    @apply bg-background text-foreground font-sans;
+                }
+            }
+
+            .custom-checkbox {
+                @apply h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none cursor-pointer;
+            }
+            .custom-checkbox:checked {
+                @apply bg-primary text-primary-foreground;
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='20 6 9 17 4 12'%3e%3c/polyline%3e%3c/svg%3e");
+                background-size: 100% 100%;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+            .dark .custom-checkbox:checked {
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232d2621' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='20 6 9 17 4 12'%3e%3c/polyline%3e%3c/svg%3e");
+            }
+
+            .resource-link {
+                @apply text-primary hover:underline text-xs break-words;
+            }
+
+            .priority-high {
+                @apply bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300;
+            }
+            .priority-medium {
+                @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300;
+            }
+            .priority-low {
+                @apply bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300;
+            }
+
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        </style>
+    </head>
+    <body class="min-h-screen bg-background font-sans antialiased">
+        <div class="container mx-auto p-4 md:p-8 max-w-[1600px]">
+            <!-- Header -->
+            <header class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold tracking-tight flex items-center gap-3">
+                        <i data-lucide="brain" class="w-8 h-8"></i>
+                        <span>AI/ML Engineer Roadmap</span>
+                    </h1>
+                    <p class="text-muted-foreground mt-1 text-sm font-serif italic">
+                        Your path to MLE, Data Engineer, AI Engineer & Solutions Architect roles
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button
+                        onclick="toggleTheme()"
+                        class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 shadow-sm"
+                    >
+                        <i data-lucide="sun" class="w-4 h-4 scale-100 dark:scale-0 transition-all absolute"></i>
+                        <i data-lucide="moon" class="w-4 h-4 scale-0 dark:scale-100 transition-all absolute"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Target Roles Section -->
+            <div class="rounded-lg border bg-card text-card-foreground shadow mb-8">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i data-lucide="target" class="w-5 h-5"></i>
+                        Target Roles & Salary Ranges (India/US)
+                    </h2>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="p-4 rounded-lg bg-muted/50 border">
+                            <h3 class="font-semibold text-primary">Machine Learning Engineer</h3>
+                            <p class="text-sm text-muted-foreground mt-1">₹12-40 LPA / $120-200K</p>
+                            <p class="text-xs mt-2">Build, deploy & optimize ML models at scale</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-muted/50 border">
+                            <h3 class="font-semibold text-primary">Data Engineer</h3>
+                            <p class="text-sm text-muted-foreground mt-1">₹10-35 LPA / $100-180K</p>
+                            <p class="text-xs mt-2">Design data pipelines, warehouses & infrastructure</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-muted/50 border">
+                            <h3 class="font-semibold text-primary">AI Engineer</h3>
+                            <p class="text-sm text-muted-foreground mt-1">₹15-50 LPA / $130-220K</p>
+                            <p class="text-xs mt-2">Implement AI solutions using LLMs, GenAI & deep learning</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-muted/50 border">
+                            <h3 class="font-semibold text-primary">AI Solutions Architect</h3>
+                            <p class="text-sm text-muted-foreground mt-1">₹25-70 LPA / $150-250K</p>
+                            <p class="text-xs mt-2">Design end-to-end AI systems & lead technical strategy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex flex-wrap gap-2 mb-8">
+                <button
+                    onclick="resetProgress()"
+                    class="shadow-sm inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2"
+                >
+                    <i data-lucide="rotate-ccw" class="w-4 h-4 mr-2"></i> Reset
+                </button>
+                <button
+                    onclick="exportProgress()"
+                    class="shadow-sm inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2"
+                >
+                    <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export
+                </button>
+                <button
+                    onclick="document.getElementById('importFile').click()"
+                    class="shadow-sm inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2"
+                >
+                    <i data-lucide="upload" class="w-4 h-4 mr-2"></i> Import JSON
+                </button>
+                <input type="file" id="importFile" accept=".json" class="hidden" onchange="importProgress(event)" />
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+                <div class="rounded-lg border bg-card text-card-foreground shadow">
+                    <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+                        <h3 class="tracking-tight text-sm font-medium">Total Topics</h3>
+                        <i data-lucide="book-open" class="w-4 h-4 text-muted-foreground"></i>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div class="text-2xl font-bold font-mono" id="totalTopics">0</div>
+                        <p class="text-xs text-muted-foreground font-serif italic">Across all categories</p>
+                    </div>
+                </div>
+
+                <div class="rounded-lg border bg-card text-card-foreground shadow">
+                    <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+                        <h3 class="tracking-tight text-sm font-medium">Completed</h3>
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-primary"></i>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div class="text-2xl font-bold font-mono" id="completedCount">0</div>
+                        <p class="text-xs text-muted-foreground font-serif italic">Topics learned</p>
+                    </div>
+                </div>
+
+                <div class="rounded-lg border bg-card text-card-foreground shadow">
+                    <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+                        <h3 class="tracking-tight text-sm font-medium">Practiced</h3>
+                        <i data-lucide="code-2" class="w-4 h-4 text-accent-foreground"></i>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div class="text-2xl font-bold font-mono" id="practicedCount">0</div>
+                        <p class="text-xs text-muted-foreground font-serif italic">Hands-on completed</p>
+                    </div>
+                </div>
+
+                <div class="rounded-lg border bg-card text-card-foreground shadow">
+                    <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+                        <h3 class="tracking-tight text-sm font-medium">Overall Progress</h3>
+                        <i data-lucide="trending-up" class="w-4 h-4 text-primary"></i>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div class="text-2xl font-bold font-mono" id="overallProgress">0%</div>
+                        <div class="w-full bg-secondary h-2 mt-2 rounded-full overflow-hidden">
+                            <div id="progressBar" class="bg-primary h-full transition-all duration-500 ease-in-out" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="rounded-lg border bg-card text-card-foreground shadow">
+                <div class="p-6">
+                    <!-- Tabs Navigation -->
+                    <div class="flex overflow-x-auto pb-4 mb-4 border-b border-border/60 scrollbar-hide" role="tablist" id="tabsList">
+                    </div>
+
+                    <!-- Tab Panels -->
+                    <div id="tabPanels" class="mt-4">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alternative Projects Section -->
+            <div class="rounded-lg border bg-card text-card-foreground shadow mt-8">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i data-lucide="lightbulb" class="w-5 h-5"></i>
+                        Alternative Project Ideas
+                    </h2>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4" id="projectsGrid">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const roadmapData = {
+                "Python Mastery": [
+                    {
+                        topic: "Python Fundamentals Refresher",
+                        video: "https://youtube.com/playlist?list=PLu0W_9lII9agICnT8t4iYVSZ3eykIAOME",
+                        videoLabel: "CodeWithHarry Python (Hindi)",
+                        text: "https://docs.python.org/3/tutorial/",
+                        textLabel: "Official Python Tutorial",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "Focus on list comprehensions, generators, and decorators. Write code daily, even 30 mins helps."
+                    },
+                    {
+                        topic: "Object-Oriented Programming",
+                        video: "https://youtube.com/playlist?list=PL-osiE80TeTsqhIuOqKhwlXsIBIdSeYtc",
+                        videoLabel: "Corey Schafer OOP",
+                        text: "https://realpython.com/python3-object-oriented-programming/",
+                        textLabel: "Real Python OOP Guide",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "Build a small project using classes. Understand dunder methods (__init__, __repr__, __str__)."
+                    },
+                    {
+                        topic: "Advanced Python (Decorators, Generators, Context Managers)",
+                        video: "https://www.youtube.com/watch?v=MYQiTG0JuPU",
+                        videoLabel: "Tech With Tim - Advanced Python",
+                        text: "https://book.pythontips.com/en/latest/",
+                        textLabel: "Python Tips Book",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "Decorators are heavily used in Flask/FastAPI. Master @property, @staticmethod, @classmethod."
+                    },
+                    {
+                        topic: "Python for Data Science (NumPy, Pandas)",
+                        video: "https://youtube.com/playlist?list=PL-osiE80TeTsWmV9i9c58mdDCSskIFdDS",
+                        videoLabel: "Corey Schafer - Pandas",
+                        text: "https://pandas.pydata.org/docs/user_guide/10min.html",
+                        textLabel: "Pandas 10-min Guide",
+                        time: "2 weeks",
+                        priority: "high",
+                        tips: "Practice with Kaggle datasets. Learn vectorized operations - avoid loops on DataFrames."
+                    },
+                    {
+                        topic: "Data Visualization (Matplotlib, Seaborn, Plotly)",
+                        video: "https://www.youtube.com/watch?v=UO98lJQ3QGI",
+                        videoLabel: "freeCodeCamp Matplotlib",
+                        text: "https://seaborn.pydata.org/tutorial.html",
+                        textLabel: "Seaborn Official Tutorial",
+                        time: "1 week",
+                        priority: "medium",
+                        tips: "Learn to tell stories with data. Plotly for interactive dashboards in production."
+                    },
+                    {
+                        topic: "Python Testing (pytest, unittest)",
+                        video: "https://www.youtube.com/watch?v=6tNS--WetLI",
+                        videoLabel: "Corey Schafer - unittest",
+                        text: "https://docs.pytest.org/en/stable/getting-started.html",
+                        textLabel: "pytest Documentation",
+                        time: "3-4 days",
+                        priority: "medium",
+                        tips: "Write tests for every function. TDD is valued in industry. Learn fixtures and mocking."
+                    },
+                    {
+                        topic: "Type Hints & Static Analysis",
+                        video: "https://www.youtube.com/watch?v=QORvB-_mbZ0",
+                        videoLabel: "ArjanCodes Type Hints",
+                        text: "https://mypy.readthedocs.io/en/stable/",
+                        textLabel: "mypy Documentation",
+                        time: "3 days",
+                        priority: "medium",
+                        tips: "Type hints are mandatory in production ML code. Use mypy in CI/CD pipelines."
+                    }
+                ],
+                "SQL & Databases": [
+                    {
+                        topic: "SQL Fundamentals (SELECT, JOIN, GROUP BY)",
+                        video: "https://www.youtube.com/watch?v=HXV3zeQKqGY",
+                        videoLabel: "freeCodeCamp SQL Full Course",
+                        text: "https://mode.com/sql-tutorial/",
+                        textLabel: "Mode SQL Tutorial",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "SQL is tested in 90% of data interviews. Practice on HackerRank SQL track daily."
+                    },
+                    {
+                        topic: "Advanced SQL (Window Functions, CTEs, Subqueries)",
+                        video: "https://www.youtube.com/watch?v=Ww71knvhQ-s",
+                        videoLabel: "techTFQ Window Functions",
+                        text: "https://learnsql.com/blog/sql-window-functions-cheat-sheet/",
+                        textLabel: "Window Functions Cheat Sheet",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "ROW_NUMBER, RANK, LAG, LEAD are interview favorites. Master recursive CTEs."
+                    },
+                    {
+                        topic: "Database Design & Normalization",
+                        video: "https://www.youtube.com/watch?v=ztHopE5Wnpc",
+                        videoLabel: "Decomplexify DB Design",
+                        text: "https://www.guru99.com/database-normalization.html",
+                        textLabel: "Database Normalization Guide",
+                        time: "4-5 days",
+                        priority: "medium",
+                        tips: "Know when to denormalize for performance. Star schema for analytics, 3NF for OLTP."
+                    },
+                    {
+                        topic: "PostgreSQL Deep Dive",
+                        video: "https://www.youtube.com/watch?v=qw--VYLpxG4",
+                        videoLabel: "freeCodeCamp PostgreSQL",
+                        text: "https://www.postgresql.org/docs/current/tutorial.html",
+                        textLabel: "PostgreSQL Official Tutorial",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "PostgreSQL is industry standard. Learn EXPLAIN ANALYZE for query optimization."
+                    },
+                    {
+                        topic: "NoSQL Databases (MongoDB, Redis)",
+                        video: "https://www.youtube.com/watch?v=ofme2o29ngU",
+                        videoLabel: "MongoDB Crash Course",
+                        text: "https://www.mongodb.com/docs/manual/tutorial/getting-started/",
+                        textLabel: "MongoDB Getting Started",
+                        time: "1 week",
+                        priority: "medium",
+                        tips: "Use MongoDB for unstructured data. Redis for caching ML predictions in production."
+                    },
+                    {
+                        topic: "Query Optimization & Indexing",
+                        video: "https://www.youtube.com/watch?v=fsG1XaZEa78",
+                        videoLabel: "Hussein Nasser - Indexing",
+                        text: "https://use-the-index-luke.com/",
+                        textLabel: "Use The Index Luke (Book)",
+                        time: "4-5 days",
+                        priority: "high",
+                        tips: "B-tree vs Hash indexes. Composite indexes order matters. Avoid SELECT *."
+                    }
+                ],
+                "Machine Learning": [
+                    {
+                        topic: "ML Fundamentals & Scikit-learn",
+                        video: "https://www.youtube.com/watch?v=7eh4d6sabA0",
+                        videoLabel: "freeCodeCamp ML with Python",
+                        text: "https://scikit-learn.org/stable/user_guide.html",
+                        textLabel: "Scikit-learn User Guide",
+                        time: "2 weeks",
+                        priority: "high",
+                        tips: "Understand bias-variance tradeoff deeply. Learn Pipeline and ColumnTransformer."
+                    },
+                    {
+                        topic: "Supervised Learning (Regression & Classification)",
+                        video: "https://www.youtube.com/playlist?list=PLKnIA16_Rmvbr7zKYQuBfsVkjoLcJgxHH",
+                        videoLabel: "StatQuest ML Playlist",
+                        text: "https://www.coursera.org/learn/machine-learning",
+                        textLabel: "Andrew Ng ML Course (Free Audit)",
+                        time: "3 weeks",
+                        priority: "high",
+                        tips: "Start with Linear/Logistic Regression. Understand gradient descent mathematically."
+                    },
+                    {
+                        topic: "Tree-based Models (Random Forest, XGBoost, LightGBM)",
+                        video: "https://www.youtube.com/watch?v=J4Wdy0Wc_xQ",
+                        videoLabel: "StatQuest XGBoost",
+                        text: "https://xgboost.readthedocs.io/en/stable/tutorials/index.html",
+                        textLabel: "XGBoost Tutorials",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "XGBoost/LightGBM win most Kaggle competitions. Learn feature importance interpretation."
+                    },
+                    {
+                        topic: "Model Evaluation & Metrics",
+                        video: "https://www.youtube.com/watch?v=85dtiMz9tSo",
+                        videoLabel: "Krish Naik - Evaluation Metrics",
+                        text: "https://machinelearningmastery.com/metrics-evaluate-machine-learning-algorithms-python/",
+                        textLabel: "ML Mastery - Metrics",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "Know when to use precision vs recall. AUC-ROC for imbalanced datasets."
+                    },
+                    {
+                        topic: "Feature Engineering & Selection",
+                        video: "https://www.youtube.com/watch?v=6WDFfaYtN6s",
+                        videoLabel: "Krish Naik - Feature Engineering",
+                        text: "https://www.featuretools.com/",
+                        textLabel: "Featuretools Documentation",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "Feature engineering > model tuning. Learn automated feature engineering with Featuretools."
+                    },
+                    {
+                        topic: "Unsupervised Learning (Clustering, PCA)",
+                        video: "https://www.youtube.com/watch?v=4b5d3muPQmA",
+                        videoLabel: "StatQuest PCA",
+                        text: "https://scikit-learn.org/stable/modules/clustering.html",
+                        textLabel: "Scikit-learn Clustering",
+                        time: "1 week",
+                        priority: "medium",
+                        tips: "Use elbow method + silhouette score for k-means. PCA for dimensionality reduction."
+                    },
+                    {
+                        topic: "Hyperparameter Tuning (GridSearch, Optuna)",
+                        video: "https://www.youtube.com/watch?v=5nYqK-HaoKY",
+                        videoLabel: "Optuna Tutorial",
+                        text: "https://optuna.readthedocs.io/en/stable/tutorial/index.html",
+                        textLabel: "Optuna Documentation",
+                        time: "3-4 days",
+                        priority: "medium",
+                        tips: "Use Optuna for Bayesian optimization. Much faster than GridSearchCV."
+                    }
+                ],
+                "Deep Learning": [
+                    {
+                        topic: "Neural Networks Fundamentals",
+                        video: "https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi",
+                        videoLabel: "3Blue1Brown Neural Networks",
+                        text: "http://neuralnetworksanddeeplearning.com/",
+                        textLabel: "Neural Networks and Deep Learning (Book)",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "Understand backpropagation mathematically. Visualize with 3B1B videos first."
+                    },
+                    {
+                        topic: "PyTorch Fundamentals",
+                        video: "https://www.youtube.com/watch?v=Z_ikDlimN6A",
+                        videoLabel: "PyTorch Official Tutorial",
+                        text: "https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html",
+                        textLabel: "PyTorch 60-min Blitz",
+                        time: "2 weeks",
+                        priority: "high",
+                        tips: "PyTorch > TensorFlow for research & interviews. Learn autograd and custom datasets."
+                    },
+                    {
+                        topic: "Convolutional Neural Networks (CNNs)",
+                        video: "https://www.youtube.com/watch?v=YRhxdVk_sIs",
+                        videoLabel: "Sentdex CNN Tutorial",
+                        text: "https://cs231n.github.io/",
+                        textLabel: "Stanford CS231n Notes",
+                        time: "2 weeks",
+                        priority: "high",
+                        tips: "Understand conv, pooling, stride, padding intuitively. Transfer learning is your friend."
+                    },
+                    {
+                        topic: "Recurrent Neural Networks (RNNs, LSTMs)",
+                        video: "https://www.youtube.com/watch?v=WCUNPb-5EYI",
+                        videoLabel: "StatQuest LSTM",
+                        text: "https://colah.github.io/posts/2015-08-Understanding-LSTMs/",
+                        textLabel: "Colah's LSTM Blog",
+                        time: "1.5 weeks",
+                        priority: "medium",
+                        tips: "LSTMs are being replaced by Transformers, but understand for legacy systems."
+                    },
+                    {
+                        topic: "Transformers & Attention Mechanism",
+                        video: "https://www.youtube.com/watch?v=4Bdc55j80l8",
+                        videoLabel: "StatQuest Transformers",
+                        text: "https://jalammar.github.io/illustrated-transformer/",
+                        textLabel: "Illustrated Transformer",
+                        time: "2 weeks",
+                        priority: "high",
+                        tips: "MUST understand attention. This is the foundation of all modern AI (GPT, BERT, etc.)."
+                    },
+                    {
+                        topic: "Hugging Face Transformers Library",
+                        video: "https://www.youtube.com/watch?v=QEaBAZQCtwE",
+                        videoLabel: "Hugging Face Course",
+                        text: "https://huggingface.co/docs/transformers/index",
+                        textLabel: "Hugging Face Documentation",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "Industry standard for NLP. Learn to fine-tune pre-trained models, not train from scratch."
+                    },
+                    {
+                        topic: "Computer Vision with PyTorch",
+                        video: "https://www.youtube.com/watch?v=tHL5STNJKag",
+                        videoLabel: "PyTorch Image Classification",
+                        text: "https://pytorch.org/vision/stable/index.html",
+                        textLabel: "torchvision Documentation",
+                        time: "1.5 weeks",
+                        priority: "medium",
+                        tips: "Use torchvision.models for pre-trained weights. ResNet, EfficientNet are good defaults."
+                    }
+                ],
+                "LLMs & GenAI": [
+                    {
+                        topic: "LLM Fundamentals & Prompt Engineering",
+                        video: "https://www.youtube.com/watch?v=jkrNMKz9pWU",
+                        videoLabel: "Andrej Karpathy - LLMs",
+                        text: "https://www.promptingguide.ai/",
+                        textLabel: "Prompt Engineering Guide",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "Prompt engineering is a real skill. Learn chain-of-thought, few-shot prompting."
+                    },
+                    {
+                        topic: "OpenAI API & LangChain",
+                        video: "https://www.youtube.com/watch?v=aywZrzNaKjs",
+                        videoLabel: "LangChain Crash Course",
+                        text: "https://python.langchain.com/docs/get_started/introduction",
+                        textLabel: "LangChain Documentation",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "LangChain for chaining LLM calls. Learn agents and tools for autonomous systems."
+                    },
+                    {
+                        topic: "Retrieval Augmented Generation (RAG)",
+                        video: "https://www.youtube.com/watch?v=T-D1OfcDW1M",
+                        videoLabel: "RAG Tutorial",
+                        text: "https://docs.llamaindex.ai/en/stable/",
+                        textLabel: "LlamaIndex Documentation",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "RAG is the #1 LLM use case in enterprise. Vector DBs + LLMs = powerful combo."
+                    },
+                    {
+                        topic: "Vector Databases (Pinecone, Chroma, Weaviate)",
+                        video: "https://www.youtube.com/watch?v=dN0lsF2cvm4",
+                        videoLabel: "Vector DB Explained",
+                        text: "https://www.pinecone.io/learn/",
+                        textLabel: "Pinecone Learning Center",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "Use Chroma for local dev (free), Pinecone for production. Understand embedding dimensions."
+                    },
+                    {
+                        topic: "Fine-tuning LLMs (LoRA, QLoRA)",
+                        video: "https://www.youtube.com/watch?v=eC6Hd1hFvos",
+                        videoLabel: "Fine-tuning LLaMA",
+                        text: "https://huggingface.co/docs/peft/index",
+                        textLabel: "PEFT Documentation",
+                        time: "1.5 weeks",
+                        priority: "medium",
+                        tips: "LoRA enables fine-tuning on consumer GPUs. Use QLoRA for even smaller memory footprint."
+                    },
+                    {
+                        topic: "LLM Evaluation & Safety",
+                        video: "https://www.youtube.com/watch?v=y7-6O5p2HLQ",
+                        videoLabel: "LLM Evaluation Methods",
+                        text: "https://github.com/openai/evals",
+                        textLabel: "OpenAI Evals",
+                        time: "4-5 days",
+                        priority: "medium",
+                        tips: "Evaluation is hard for LLMs. Learn about hallucination detection and guardrails."
+                    }
+                ],
+                "MLOps & Deployment": [
+                    {
+                        topic: "Git & Version Control",
+                        video: "https://www.youtube.com/watch?v=RGOj5yH7evk",
+                        videoLabel: "freeCodeCamp Git & GitHub",
+                        text: "https://git-scm.com/book/en/v2",
+                        textLabel: "Pro Git Book",
+                        time: "4-5 days",
+                        priority: "high",
+                        tips: "Learn branching strategies (GitFlow). Commit often, write good commit messages."
+                    },
+                    {
+                        topic: "Docker & Containerization",
+                        video: "https://www.youtube.com/watch?v=fqMOX6JJhGo",
+                        videoLabel: "freeCodeCamp Docker",
+                        text: "https://docs.docker.com/get-started/",
+                        textLabel: "Docker Get Started",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "Every ML model should be dockerized. Learn multi-stage builds for smaller images."
+                    },
+                    {
+                        topic: "FastAPI for ML APIs",
+                        video: "https://www.youtube.com/watch?v=0sOvCWFmrtA",
+                        videoLabel: "freeCodeCamp FastAPI",
+                        text: "https://fastapi.tiangolo.com/tutorial/",
+                        textLabel: "FastAPI Official Tutorial",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "FastAPI is the go-to for ML APIs. Async support, auto docs, Pydantic validation built-in."
+                    },
+                    {
+                        topic: "Model Serving (TorchServe, TF Serving, Triton)",
+                        video: "https://www.youtube.com/watch?v=XpHSfOi3sGk",
+                        videoLabel: "Model Serving Overview",
+                        text: "https://pytorch.org/serve/",
+                        textLabel: "TorchServe Documentation",
+                        time: "1 week",
+                        priority: "medium",
+                        tips: "TorchServe for PyTorch models. Triton for multi-framework serving at scale."
+                    },
+                    {
+                        topic: "MLflow for Experiment Tracking",
+                        video: "https://www.youtube.com/watch?v=ksYIVDue8ak",
+                        videoLabel: "MLflow Tutorial",
+                        text: "https://mlflow.org/docs/latest/index.html",
+                        textLabel: "MLflow Documentation",
+                        time: "4-5 days",
+                        priority: "high",
+                        tips: "Track experiments, parameters, metrics. Model registry for versioning. Industry standard."
+                    },
+                    {
+                        topic: "CI/CD for ML (GitHub Actions, Jenkins)",
+                        video: "https://www.youtube.com/watch?v=R8_veQiYBjI",
+                        videoLabel: "GitHub Actions Tutorial",
+                        text: "https://docs.github.com/en/actions",
+                        textLabel: "GitHub Actions Docs",
+                        time: "4-5 days",
+                        priority: "medium",
+                        tips: "Automate testing, linting, deployment. Learn to trigger retraining on data drift."
+                    },
+                    {
+                        topic: "Kubernetes Basics for ML",
+                        video: "https://www.youtube.com/watch?v=X48VuDVv0do",
+                        videoLabel: "TechWorld K8s Full Course",
+                        text: "https://kubernetes.io/docs/tutorials/",
+                        textLabel: "Kubernetes Official Tutorial",
+                        time: "2 weeks",
+                        priority: "medium",
+                        tips: "K8s for scaling ML services. Learn pods, deployments, services. KubeFlow for ML workflows."
+                    },
+                    {
+                        topic: "Model Monitoring & Data Drift",
+                        video: "https://www.youtube.com/watch?v=vqv2Kd4DN1E",
+                        videoLabel: "ML Monitoring Explained",
+                        text: "https://evidentlyai.com/blog/ml-monitoring-do-i-need-it",
+                        textLabel: "Evidently AI Blog",
+                        time: "3-4 days",
+                        priority: "high",
+                        tips: "Models degrade over time. Monitor input/output distributions. Use Evidently or WhyLabs."
+                    }
+                ],
+                "Cloud Platforms": [
+                    {
+                        topic: "AWS Fundamentals (EC2, S3, IAM)",
+                        video: "https://www.youtube.com/watch?v=ulprqHHWlng",
+                        videoLabel: "freeCodeCamp AWS",
+                        text: "https://aws.amazon.com/getting-started/",
+                        textLabel: "AWS Getting Started",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "Most companies use AWS. Learn EC2 for compute, S3 for data, IAM for security."
+                    },
+                    {
+                        topic: "AWS SageMaker for ML",
+                        video: "https://www.youtube.com/watch?v=LkR3GNDB0HI",
+                        videoLabel: "SageMaker Tutorial",
+                        text: "https://docs.aws.amazon.com/sagemaker/",
+                        textLabel: "SageMaker Documentation",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "SageMaker for end-to-end ML. Built-in algorithms, training, deployment. Learn Studio."
+                    },
+                    {
+                        topic: "GCP & Vertex AI",
+                        video: "https://www.youtube.com/watch?v=jpno8FSqpc8",
+                        videoLabel: "GCP for Beginners",
+                        text: "https://cloud.google.com/vertex-ai/docs",
+                        textLabel: "Vertex AI Documentation",
+                        time: "1 week",
+                        priority: "medium",
+                        tips: "GCP is preferred for ML research. BigQuery is excellent for data analytics."
+                    },
+                    {
+                        topic: "Azure ML Basics",
+                        video: "https://www.youtube.com/watch?v=CtKwAkl3cKc",
+                        videoLabel: "Azure ML Tutorial",
+                        text: "https://learn.microsoft.com/en-us/azure/machine-learning/",
+                        textLabel: "Azure ML Documentation",
+                        time: "4-5 days",
+                        priority: "low",
+                        tips: "Azure popular in enterprise. Learn basics for job flexibility. AzureML Designer for no-code."
+                    },
+                    {
+                        topic: "Infrastructure as Code (Terraform)",
+                        video: "https://www.youtube.com/watch?v=SLB_c_ayRMo",
+                        videoLabel: "Terraform Crash Course",
+                        text: "https://developer.hashicorp.com/terraform/tutorials",
+                        textLabel: "Terraform Tutorials",
+                        time: "1 week",
+                        priority: "medium",
+                        tips: "Define cloud infra in code. Essential for reproducible ML environments."
+                    }
+                ],
+                "Data Engineering": [
+                    {
+                        topic: "Data Pipelines & ETL Concepts",
+                        video: "https://www.youtube.com/watch?v=qWru-b6m030",
+                        videoLabel: "Data Engineering Intro",
+                        text: "https://www.startdataengineering.com/",
+                        textLabel: "Start Data Engineering Blog",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "Understand batch vs streaming. ETL vs ELT. Data quality is king."
+                    },
+                    {
+                        topic: "Apache Spark with PySpark",
+                        video: "https://www.youtube.com/watch?v=_C8kWso4ne4",
+                        videoLabel: "freeCodeCamp PySpark",
+                        text: "https://spark.apache.org/docs/latest/api/python/",
+                        textLabel: "PySpark Documentation",
+                        time: "2 weeks",
+                        priority: "high",
+                        tips: "Spark for big data processing. Learn DataFrame API, avoid RDDs. Understand partitioning."
+                    },
+                    {
+                        topic: "Apache Airflow for Orchestration",
+                        video: "https://www.youtube.com/watch?v=AHMm1wfGuHE",
+                        videoLabel: "Airflow Tutorial",
+                        text: "https://airflow.apache.org/docs/",
+                        textLabel: "Airflow Documentation",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "Airflow is industry standard. Learn DAGs, operators, sensors. Use TaskFlow API."
+                    },
+                    {
+                        topic: "Data Warehousing (Snowflake, BigQuery)",
+                        video: "https://www.youtube.com/watch?v=9PBvVeCQi0w",
+                        videoLabel: "Snowflake Tutorial",
+                        text: "https://docs.snowflake.com/en/user-guide-getting-started",
+                        textLabel: "Snowflake Getting Started",
+                        time: "1 week",
+                        priority: "medium",
+                        tips: "Modern data warehouses separate compute/storage. Learn partitioning and clustering."
+                    },
+                    {
+                        topic: "Streaming Data (Kafka)",
+                        video: "https://www.youtube.com/watch?v=Ch5VhJzaoaI",
+                        videoLabel: "Kafka for Beginners",
+                        text: "https://kafka.apache.org/documentation/",
+                        textLabel: "Kafka Documentation",
+                        time: "1.5 weeks",
+                        priority: "medium",
+                        tips: "Kafka for real-time data. Understand topics, partitions, consumers. Use with Spark Streaming."
+                    },
+                    {
+                        topic: "dbt for Data Transformation",
+                        video: "https://www.youtube.com/watch?v=5rNquRnNb4E",
+                        videoLabel: "dbt Tutorial",
+                        text: "https://docs.getdbt.com/docs/introduction",
+                        textLabel: "dbt Documentation",
+                        time: "4-5 days",
+                        priority: "medium",
+                        tips: "dbt transforms data in warehouse. SQL-based, version controlled. Great for analytics engineers."
+                    }
+                ],
+                "System Design": [
+                    {
+                        topic: "System Design Fundamentals",
+                        video: "https://www.youtube.com/watch?v=MbjObHmDbZo",
+                        videoLabel: "System Design Primer",
+                        text: "https://github.com/donnemartin/system-design-primer",
+                        textLabel: "System Design Primer (GitHub)",
+                        time: "2 weeks",
+                        priority: "high",
+                        tips: "Understand scalability, availability, consistency. Start with URL shortener design."
+                    },
+                    {
+                        topic: "ML System Design",
+                        video: "https://www.youtube.com/watch?v=sELBkZzT5Hc",
+                        videoLabel: "ML System Design Interview",
+                        text: "https://github.com/chiphuyen/machine-learning-systems-design",
+                        textLabel: "ML Systems Design (Chip Huyen)",
+                        time: "2 weeks",
+                        priority: "high",
+                        tips: "Different from regular system design. Focus on data pipelines, model serving, monitoring."
+                    },
+                    {
+                        topic: "Designing ML Pipelines",
+                        video: "https://www.youtube.com/watch?v=dYZ-Lz8JZXc",
+                        videoLabel: "ML Pipeline Design",
+                        text: "https://www.oreilly.com/library/view/building-machine-learning/9781492053187/",
+                        textLabel: "Building ML Pipelines (Book)",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "Design for retraining, A/B testing. Consider data versioning from day 1."
+                    },
+                    {
+                        topic: "Microservices Architecture",
+                        video: "https://www.youtube.com/watch?v=CdBtNQZH8a4",
+                        videoLabel: "Microservices Explained",
+                        text: "https://microservices.io/patterns/index.html",
+                        textLabel: "Microservices Patterns",
+                        time: "1 week",
+                        priority: "medium",
+                        tips: "Break ML systems into services. API Gateway, service discovery. Avoid distributed monolith."
+                    },
+                    {
+                        topic: "Distributed Systems Basics",
+                        video: "https://www.youtube.com/watch?v=UEAMfLPZZhE",
+                        videoLabel: "MIT Distributed Systems",
+                        text: "https://www.distributedsystemscourse.com/",
+                        textLabel: "Distributed Systems Course",
+                        time: "2 weeks",
+                        priority: "medium",
+                        tips: "Understand CAP theorem, consensus, replication. Important for large-scale ML."
+                    }
+                ],
+                "Mathematics for ML": [
+                    {
+                        topic: "Linear Algebra for ML",
+                        video: "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab",
+                        videoLabel: "3Blue1Brown Linear Algebra",
+                        text: "https://www.deeplearningbook.org/contents/linear_algebra.html",
+                        textLabel: "Deep Learning Book - Lin Alg",
+                        time: "2 weeks",
+                        priority: "high",
+                        tips: "Watch 3B1B for intuition. Focus on eigenvalues, SVD - used in PCA, embeddings."
+                    },
+                    {
+                        topic: "Calculus & Optimization",
+                        video: "https://www.youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr",
+                        videoLabel: "3Blue1Brown Calculus",
+                        text: "https://www.deeplearningbook.org/contents/numerical.html",
+                        textLabel: "Deep Learning Book - Numerical",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "Understand gradients, chain rule (for backprop). Convex optimization for understanding loss."
+                    },
+                    {
+                        topic: "Probability & Statistics",
+                        video: "https://www.youtube.com/playlist?list=PLblh5JKOoLUK0FLuzwntyYI10UQFUhsY9",
+                        videoLabel: "StatQuest Statistics",
+                        text: "https://www.probabilitycourse.com/",
+                        textLabel: "Probability Course",
+                        time: "2 weeks",
+                        priority: "high",
+                        tips: "Foundation of ML. Bayes theorem, distributions, hypothesis testing. Very interview-heavy."
+                    },
+                    {
+                        topic: "Information Theory Basics",
+                        video: "https://www.youtube.com/watch?v=ErfnhcEV1O8",
+                        videoLabel: "Information Theory Intuition",
+                        text: "https://colah.github.io/posts/2015-09-Visual-Information/",
+                        textLabel: "Visual Information Theory",
+                        time: "3-4 days",
+                        priority: "medium",
+                        tips: "Understand entropy, cross-entropy (loss functions), KL divergence."
+                    }
+                ],
+                "DSA & Interview Prep": [
+                    {
+                        topic: "Arrays & Hashing",
+                        video: "https://www.youtube.com/watch?v=KLlXCFG5TnA",
+                        videoLabel: "NeetCode - Arrays",
+                        text: "https://neetcode.io/roadmap",
+                        textLabel: "NeetCode Roadmap",
+                        time: "1.5 weeks",
+                        priority: "high",
+                        tips: "Two Sum, Valid Anagram are classics. HashMap is your best friend for O(1) lookups."
+                    },
+                    {
+                        topic: "Two Pointers & Sliding Window",
+                        video: "https://www.youtube.com/watch?v=MK-NZ4hN7rs",
+                        videoLabel: "NeetCode - Sliding Window",
+                        text: "https://leetcode.com/tag/sliding-window/",
+                        textLabel: "LeetCode Sliding Window",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "Pattern for subarray problems. Master variable-size and fixed-size windows."
+                    },
+                    {
+                        topic: "Binary Search",
+                        video: "https://www.youtube.com/watch?v=W9QJ8HaRvJQ",
+                        videoLabel: "Striver - Binary Search",
+                        text: "https://takeuforward.org/data-structure/binary-search-explained/",
+                        textLabel: "Striver Binary Search",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "Not just sorted arrays! Used for search space problems. Learn lower_bound, upper_bound."
+                    },
+                    {
+                        topic: "Trees & Graphs",
+                        video: "https://www.youtube.com/watch?v=OnSn2XEQ4MY",
+                        videoLabel: "Abdul Bari - Graphs",
+                        text: "https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/",
+                        textLabel: "GFG Graphs",
+                        time: "2 weeks",
+                        priority: "high",
+                        tips: "BFS/DFS are asked in 50% of interviews. Trees are just special graphs!"
+                    },
+                    {
+                        topic: "Dynamic Programming",
+                        video: "https://www.youtube.com/watch?v=oBt53YbR9Kk",
+                        videoLabel: "freeCodeCamp DP",
+                        text: "https://atcoder.jp/contests/dp/tasks",
+                        textLabel: "AtCoder DP Contest",
+                        time: "3 weeks",
+                        priority: "high",
+                        tips: "The hardest topic. Start with 1D DP, then 2D. Memoization first, then tabulation."
+                    },
+                    {
+                        topic: "Stacks, Queues & Heaps",
+                        video: "https://www.youtube.com/watch?v=RBSGKlAvoiM",
+                        videoLabel: "freeCodeCamp DS",
+                        text: "https://www.programiz.com/dsa/heap-data-structure",
+                        textLabel: "Heap Guide",
+                        time: "1 week",
+                        priority: "medium",
+                        tips: "Monotonic stack for next greater element. Heap for k-th largest/smallest problems."
+                    },
+                    {
+                        topic: "Backtracking & Recursion",
+                        video: "https://www.youtube.com/watch?v=DKCbsiDBN6c",
+                        videoLabel: "Striver Recursion",
+                        text: "https://leetcode.com/tag/backtracking/",
+                        textLabel: "LeetCode Backtracking",
+                        time: "1.5 weeks",
+                        priority: "medium",
+                        tips: "Draw the recursion tree! Permutations, combinations, subsets are interview staples."
+                    },
+                    {
+                        topic: "Mock Interviews & Practice",
+                        video: "https://www.youtube.com/watch?v=XKu_SEDAykw",
+                        videoLabel: "Google Interview Tips",
+                        text: "https://leetcode.com/problemset/",
+                        textLabel: "LeetCode Problems",
+                        time: "Ongoing",
+                        priority: "high",
+                        tips: "Solve 150-200 problems. Time yourself (45 mins per problem). Do mock interviews!"
+                    }
+                ],
+                "ML System Design": [
+                    {
+                        topic: "ML System Design Fundamentals",
+                        video: "https://www.youtube.com/watch?v=m8LI0TDsEbU",
+                        videoLabel: "ML System Design Overview",
+                        text: "https://huyenchip.com/machine-learning-systems-design/toc.html",
+                        textLabel: "Chip Huyen's ML Design Guide",
+                        time: "1 week",
+                        priority: "high",
+                        tips: "Always start with problem requirements, metrics, then design. Not about ML algorithms!"
+                    },
+                    {
+                        topic: "Design a Recommendation System",
+                        video: "https://www.youtube.com/watch?v=1JRrCEgiyHM",
+                        videoLabel: "Netflix Recommendations",
+                        text: "https://netflixtechblog.com/system-architectures-for-personalization-and-recommendation-e081aa94b5d8",
+                        textLabel: "Netflix Tech Blog",
+                        time: "4-5 days",
+                        priority: "high",
+                        tips: "Collaborative filtering + content-based + ranking. Think about cold start problem."
+                    },
+                    {
+                        topic: "Design a Search/Ranking System",
+                        video: "https://www.youtube.com/watch?v=IXh3vuVJvMk",
+                        videoLabel: "Search System Design",
+                        text: "https://www.educative.io/courses/grokking-the-machine-learning-interview",
+                        textLabel: "Grokking ML Interview",
+                        time: "4-5 days",
+                        priority: "high",
+                        tips: "Two-stage: retrieval (fast, recall) then ranking (slower, precision). Learn BM25, embeddings."
+                    },
+                    {
+                        topic: "Design a Fraud Detection System",
+                        video: "https://www.youtube.com/watch?v=S5VWPmkjPhM",
+                        videoLabel: "Fraud Detection ML",
+                        text: "https://fraud-detection-handbook.github.io/fraud-detection-handbook/",
+                        textLabel: "Fraud Detection Handbook",
+                        time: "3-4 days",
+                        priority: "medium",
+                        tips: "Extreme class imbalance! Focus on precision-recall tradeoff. Real-time vs batch."
+                    },
+                    {
+                        topic: "Design an Ad Click Prediction System",
+                        video: "https://www.youtube.com/watch?v=kQMAu-sGQoU",
+                        videoLabel: "Ad Prediction System",
+                        text: "https://engineering.fb.com/2021/01/26/ml-applications/news-feed-ranking/",
+                        textLabel: "Facebook Ranking",
+                        time: "4-5 days",
+                        priority: "medium",
+                        tips: "Feature engineering is key. CTR prediction with calibration. Billions of events daily."
+                    },
+                    {
+                        topic: "Design an LLM-based Application",
+                        video: "https://www.youtube.com/watch?v=TRjq7t2Ms5I",
+                        videoLabel: "LLM App Architecture",
+                        text: "https://www.latent.space/p/llm-apps",
+                        textLabel: "Latent Space LLM Guide",
+                        time: "4-5 days",
+                        priority: "high",
+                        tips: "RAG vs fine-tuning decision tree. Prompt caching, rate limiting, cost optimization."
+                    },
+                    {
+                        topic: "ML Infrastructure & Scaling",
+                        video: "https://www.youtube.com/watch?v=3l0qYfpbCKI",
+                        videoLabel: "ML Infrastructure",
+                        text: "https://developers.google.com/machine-learning/guides/rules-of-ml",
+                        textLabel: "Google Rules of ML",
+                        time: "3-4 days",
+                        priority: "medium",
+                        tips: "Feature stores, model registries, A/B testing infrastructure. Think about latency budgets."
+                    }
+                ],
+                "Soft Skills & Career": [
+                    {
+                        topic: "Technical Communication",
+                        video: "https://www.youtube.com/watch?v=JZUP2e5WQAQ",
+                        videoLabel: "Tech Presentations",
+                        text: "https://www.amazon.in/Writing-Computer-Science-Justin-Zobel/dp/1852338024",
+                        textLabel: "Writing for CS (Book)",
+                        time: "Ongoing",
+                        priority: "high",
+                        tips: "Can you explain your model to a PM? Practice writing design docs. Blog your projects!"
+                    },
+                    {
+                        topic: "Building a Strong Portfolio",
+                        video: "https://www.youtube.com/watch?v=u75hUSShvnc",
+                        videoLabel: "GitHub Portfolio Tips",
+                        text: "https://www.datascienceportfol.io/",
+                        textLabel: "DS Portfolio Examples",
+                        time: "Ongoing",
+                        priority: "high",
+                        tips: "3-5 quality projects > 20 tutorials. Show end-to-end: problem → solution → deployment → metrics."
+                    },
+                    {
+                        topic: "Resume & LinkedIn Optimization",
+                        video: "https://www.youtube.com/watch?v=BYUy1yvjHxE",
+                        videoLabel: "Tech Resume Tips",
+                        text: "https://www.careercup.com/resume",
+                        textLabel: "CareerCup Resume Guide",
+                        time: "2-3 days",
+                        priority: "high",
+                        tips: "Quantify everything! 'Reduced latency by 40%' not 'Improved performance'. Use STAR format."
+                    },
+                    {
+                        topic: "Networking & Community",
+                        video: "https://www.youtube.com/watch?v=YT7_-ZWMWPI",
+                        videoLabel: "Networking for Devs",
+                        text: "https://twitter.com/",
+                        textLabel: "AI Twitter (X)",
+                        time: "Ongoing",
+                        priority: "medium",
+                        tips: "Follow AI researchers on Twitter/X. Join Discord communities. Attend local meetups."
+                    }
+                ]
+            };
+
+            const alternativeProjects = [
+                {
+                    name: "Real-time Stock Price Predictor",
+                    description: "Build an LSTM/Transformer model to predict stock prices with live data streaming via Kafka, served through FastAPI.",
+                    skills: ["Deep Learning", "Kafka", "FastAPI", "Docker"],
+                    difficulty: "Advanced",
+                    roles: ["MLE", "AI Engineer"]
+                },
+                {
+                    name: "Recommendation System",
+                    description: "Build a Netflix-style recommendation engine using collaborative filtering and content-based methods with MLflow tracking.",
+                    skills: ["ML", "SQL", "FastAPI", "MLflow"],
+                    difficulty: "Intermediate",
+                    roles: ["MLE", "Data Engineer"]
+                },
+                {
+                    name: "RAG-based Document QA System",
+                    description: "Create a chatbot that answers questions from your documents using LangChain, vector DB, and OpenAI/local LLM.",
+                    skills: ["LLMs", "Vector DBs", "LangChain", "FastAPI"],
+                    difficulty: "Intermediate",
+                    roles: ["AI Engineer", "Solutions Architect"]
+                },
+                {
+                    name: "End-to-End ML Pipeline on AWS",
+                    description: "Design and deploy a complete ML pipeline using SageMaker, S3, Lambda, with CI/CD and monitoring.",
+                    skills: ["AWS", "MLOps", "Docker", "Terraform"],
+                    difficulty: "Advanced",
+                    roles: ["MLE", "Solutions Architect"]
+                },
+                {
+                    name: "Data Lakehouse with Delta Lake",
+                    description: "Build a modern data lakehouse using Spark, Delta Lake, and Airflow for incremental data processing.",
+                    skills: ["Spark", "Airflow", "SQL", "Delta Lake"],
+                    difficulty: "Advanced",
+                    roles: ["Data Engineer"]
+                },
+                {
+                    name: "Computer Vision Object Detection API",
+                    description: "Train YOLOv8 for custom object detection, deploy with TorchServe/Triton, containerized with Docker.",
+                    skills: ["Deep Learning", "PyTorch", "Docker", "Model Serving"],
+                    difficulty: "Intermediate",
+                    roles: ["MLE", "AI Engineer"]
+                },
+                {
+                    name: "Sentiment Analysis Dashboard",
+                    description: "Real-time Twitter/Reddit sentiment analysis with Kafka streaming, Spark processing, and Plotly dashboard.",
+                    skills: ["NLP", "Kafka", "Spark", "Visualization"],
+                    difficulty: "Intermediate",
+                    roles: ["Data Engineer", "MLE"]
+                },
+                {
+                    name: "LLM Fine-tuning Platform",
+                    description: "Build a platform to fine-tune LLMs using LoRA/QLoRA with custom datasets, with Gradio interface.",
+                    skills: ["LLMs", "Hugging Face", "PyTorch", "Gradio"],
+                    difficulty: "Advanced",
+                    roles: ["AI Engineer", "MLE"]
+                },
+                {
+                    name: "Fraud Detection System",
+                    description: "Build an end-to-end fraud detection system with feature store, model training, and real-time inference.",
+                    skills: ["ML", "Feature Engineering", "FastAPI", "Kafka"],
+                    difficulty: "Advanced",
+                    roles: ["MLE", "Data Engineer"]
+                }
+            ];
+
+            let totalTopics = 0;
+
+            function initApp() {
+                const tabsList = document.getElementById("tabsList");
+                const tabPanels = document.getElementById("tabPanels");
+                const categories = Object.keys(roadmapData);
+
+                totalTopics = 0;
+
+                categories.forEach((category, idx) => {
+                    const tabId = `tab-${idx}`;
+                    const panelId = `panel-${idx}`;
+                    const isFirst = idx === 0;
+
+                    // Tab button
+                    const btn = document.createElement("button");
+                    btn.type = "button";
+                    btn.role = "tab";
+                    btn.id = tabId;
+                    btn.setAttribute("aria-controls", panelId);
+                    btn.setAttribute("aria-selected", isFirst);
+                    btn.tabIndex = isFirst ? 0 : -1;
+                    btn.textContent = category;
+                    btn.className = isFirst
+                        ? "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-background text-foreground shadow-sm mr-2"
+                        : "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-muted-foreground hover:bg-muted/50 hover:text-foreground mr-2";
+
+                    btn.onclick = () => switchTab(btn);
+                    tabsList.appendChild(btn);
+
+                    // Panel
+                    const panel = document.createElement("div");
+                    panel.role = "tabpanel";
+                    panel.id = panelId;
+                    panel.setAttribute("aria-labelledby", tabId);
+                    panel.tabIndex = -1;
+                    if (!isFirst) panel.className = "hidden";
+
+                    // Table Container
+                    const tableContainer = document.createElement("div");
+                    tableContainer.className = "relative w-full overflow-x-auto";
+
+                    const table = document.createElement("table");
+                    table.className = "w-full caption-bottom text-sm min-w-[1200px]";
+
+                    table.innerHTML = `
+                        <thead class="[&_tr]:border-b">
+                            <tr class="border-b transition-colors hover:bg-muted/50">
+                                <th class="h-12 px-3 text-left align-middle font-medium text-muted-foreground font-serif w-[200px]">Topic</th>
+                                <th class="h-12 px-3 text-left align-middle font-medium text-muted-foreground font-serif w-[180px]">Video Resource</th>
+                                <th class="h-12 px-3 text-left align-middle font-medium text-muted-foreground font-serif w-[180px]">Text Resource</th>
+                                <th class="h-12 px-3 text-center align-middle font-medium text-muted-foreground font-serif w-[80px]">Time</th>
+                                <th class="h-12 px-3 text-center align-middle font-medium text-muted-foreground font-serif w-[80px]">Priority</th>
+                                <th class="h-12 px-3 text-left align-middle font-medium text-muted-foreground font-serif w-[280px]">Expert Tips</th>
+                                <th class="h-12 px-3 text-center align-middle font-medium text-muted-foreground font-serif w-[60px]">Done</th>
+                                <th class="h-12 px-3 text-center align-middle font-medium text-muted-foreground font-serif w-[70px]">Practiced</th>
+                            </tr>
+                        </thead>
+                    `;
+
+                    const tbody = document.createElement("tbody");
+                    tbody.className = "[&_tr:last-child]:border-0";
+
+                    const topics = roadmapData[category];
+
+                    topics.forEach((item, topicIdx) => {
+                        const id = `${idx}-${topicIdx}`;
+                        totalTopics++;
+
+                        const priorityClass = item.priority === 'high' ? 'priority-high' : 
+                                              item.priority === 'medium' ? 'priority-medium' : 'priority-low';
+
+                        const tr = document.createElement("tr");
+                        tr.className = "border-b transition-colors hover:bg-muted/50";
+                        tr.innerHTML = `
+                            <td class="p-3 align-middle font-medium">${item.topic}</td>
+                            <td class="p-3 align-middle">
+                                <a href="${item.video}" target="_blank" class="resource-link flex items-center gap-1">
+                                    <i data-lucide="youtube" class="w-3 h-3 shrink-0"></i>
+                                    ${item.videoLabel}
+                                </a>
+                            </td>
+                            <td class="p-3 align-middle">
+                                <a href="${item.text}" target="_blank" class="resource-link flex items-center gap-1">
+                                    <i data-lucide="book-open" class="w-3 h-3 shrink-0"></i>
+                                    ${item.textLabel}
+                                </a>
+                            </td>
+                            <td class="p-3 align-middle text-center">
+                                <span class="text-xs font-mono bg-muted px-2 py-1 rounded">${item.time}</span>
+                            </td>
+                            <td class="p-3 align-middle text-center">
+                                <span class="text-xs px-2 py-1 rounded ${priorityClass}">${item.priority.toUpperCase()}</span>
+                            </td>
+                            <td class="p-3 align-middle text-xs text-muted-foreground">${item.tips}</td>
+                            <td class="p-3 align-middle text-center">
+                                <input type="checkbox" id="complete-${id}" class="custom-checkbox" onchange="updateProgress()">
+                            </td>
+                            <td class="p-3 align-middle text-center">
+                                <input type="checkbox" id="practiced-${id}" class="custom-checkbox" onchange="updateProgress()">
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+
+                    table.appendChild(tbody);
+                    tableContainer.appendChild(table);
+                    panel.appendChild(tableContainer);
+                    tabPanels.appendChild(panel);
+                });
+
+                document.getElementById("totalTopics").textContent = totalTopics;
+                lucide.createIcons();
+            }
+
+            function switchTab(tab) {
+                const allTabs = document.querySelectorAll('[role="tab"]');
+                const allPanels = document.querySelectorAll('[role="tabpanel"]');
+                const panelId = tab.getAttribute("aria-controls");
+
+                allTabs.forEach((t) => {
+                    const isActive = t === tab;
+                    t.setAttribute("aria-selected", isActive);
+                    t.tabIndex = isActive ? 0 : -1;
+                    if (isActive) {
+                        t.className = "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-background text-foreground shadow-sm mr-2";
+                    } else {
+                        t.className = "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-muted-foreground hover:bg-muted/50 hover:text-foreground mr-2";
+                    }
+                });
+
+                allPanels.forEach((p) => {
+                    if (p.id === panelId) {
+                        p.classList.remove("hidden");
+                    } else {
+                        p.classList.add("hidden");
+                    }
+                });
+            }
+
+            function updateProgress() {
+                const allChecked = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'));
+
+                const completed = allChecked.filter(cb => cb.id.startsWith('complete-')).length;
+                const practiced = allChecked.filter(cb => cb.id.startsWith('practiced-')).length;
+
+                document.getElementById("completedCount").textContent = completed;
+                document.getElementById("practicedCount").textContent = practiced;
+
+                const pct = totalTopics ? Math.round((completed / totalTopics) * 100) : 0;
+                document.getElementById("overallProgress").textContent = pct + "%";
+                document.getElementById("progressBar").style.width = pct + "%";
+
+                // Save to localStorage
+                localStorage.setItem('ai_roadmap_progress', JSON.stringify({
+                    progress: Array.from(document.querySelectorAll('input[type="checkbox"]')).reduce((acc, cb) => {
+                        acc[cb.id] = cb.checked;
+                        return acc;
+                    }, {})
+                }));
+            }
+
+            function loadProgress() {
+                try {
+                    const data = JSON.parse(localStorage.getItem('ai_roadmap_progress') || '{}');
+                    Object.entries(data.progress || {}).forEach(([id, checked]) => {
+                        const el = document.getElementById(id);
+                        if (el) el.checked = checked;
+                    });
+                    updateProgress();
+                } catch (e) {}
+            }
+
+            function resetProgress() {
+                if (!confirm('Are you sure you want to reset all progress? This cannot be undone.')) return;
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                    cb.checked = false;
+                });
+                updateProgress();
+            }
+
+            function exportProgress() {
+                const data = {
+                    title: 'AI/ML Engineer Roadmap Progress',
+                    timestamp: new Date().toISOString(),
+                    progress: Array.from(document.querySelectorAll('input[type="checkbox"]')).reduce((acc, cb) => {
+                        acc[cb.id] = cb.checked;
+                        return acc;
+                    }, {})
+                };
+
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `AI_ML_Roadmap_Progress_${new Date().toISOString().slice(0, 10)}.json`;
+                a.click();
+            }
+
+            function importProgress(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        const data = JSON.parse(ev.target.result);
+                        Object.entries(data.progress || {}).forEach(([id, checked]) => {
+                            const el = document.getElementById(id);
+                            if (el) el.checked = checked;
+                        });
+                        updateProgress();
+                        alert('✅ Progress imported successfully!');
+                    } catch {
+                        alert('❌ Invalid file format.');
+                    }
+                };
+                reader.readAsText(file);
+                e.target.value = '';
+            }
+
+            function toggleTheme() {
+                const html = document.documentElement;
+                const isDark = html.classList.contains('dark');
+
+                if (isDark) {
+                    html.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    html.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            }
+
+            function loadTheme() {
+                const theme = localStorage.getItem('theme') || 'light';
+                if (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark');
+                } else if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+
+            function renderProjects() {
+                const projectsGrid = document.getElementById('projectsGrid');
+                projectsGrid.innerHTML = alternativeProjects.map((project, idx) => `
+                    <div class="p-4 rounded-lg bg-muted/50 border hover:shadow-md transition-shadow">
+                        <div class="flex items-start justify-between mb-2">
+                            <h3 class="font-semibold text-primary">${project.name}</h3>
+                            <span class="text-xs px-2 py-1 rounded ${project.difficulty === 'Advanced' ? 'priority-high' : project.difficulty === 'Intermediate' ? 'priority-medium' : 'priority-low'}">${project.difficulty}</span>
+                        </div>
+                        <p class="text-sm text-muted-foreground mb-3">${project.description}</p>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            ${project.skills.map(skill => `<span class="text-xs bg-secondary px-2 py-0.5 rounded">${skill}</span>`).join('')}
+                        </div>
+                        <div class="flex items-center justify-between text-xs text-muted-foreground">
+                            <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i>${project.time}</span>
+                            <span class="flex items-center gap-1"><i data-lucide="briefcase" class="w-3 h-3"></i>${project.roles.join(', ')}</span>
+                        </div>
+                    </div>
+                `).join('');
+                lucide.createIcons();
+            }
+
+            window.addEventListener('DOMContentLoaded', () => {
+                loadTheme();
+                initApp();
+                loadProgress();
+                renderProjects();
+            });
+        </script>
+    </body>
+</html>
