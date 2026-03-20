@@ -12,7 +12,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#0f1117;--bg2:#161925;--bg3:#1e2233;--bg4:#2a3044;--border:#3a415a;--border2:#4a5270;--text:#e8e8e8;--text2:#a0a5b5;--text3:#6b7280;--amber:#f5a623;--amber2:#d98e16;--amber-dim:rgba(245,166,35,0.12);--amber-dim2:rgba(245,166,35,0.06);--green:#10b981;--green-dim:rgba(16,185,129,0.12);--red:#ef4444;--red-dim:rgba(239,68,68,0.1);--blue:#3b82f6;--border-hover:#5c668a;--radius:6px}
-html.light{--bg:#f4f3ef;--bg2:#eceae4;--bg3:#e4e2da;--bg4:#dddbd2;--border:#d0cec5;--border2:#bfbdb3;--border-hover:#a09e93;--text:#1a1a1e;--text2:#5a5a6a;--text3:#9a9aab;--amber-dim:rgba(245,166,35,0.1);--amber-dim2:rgba(245,166,35,0.05);--green-dim:rgba(16,185,129,0.1);--red-dim:rgba(239,68,68,0.07)}
+html.light{--bg:#f4f3ef;--bg2:#eceae4;--bg3:#e4e2da;--bg4:#dddbd2;--border:#d0cec5;--border2:#bfbdb3;--border-hover:#a09e93;--text:#1a1a1e;--text2:#5a5a6a;--text3:#9a9aab;--amber:#0f766e;--amber2:#115e59;--amber-dim:rgba(15,118,110,0.1);--amber-dim2:rgba(15,118,110,0.05);--green-dim:rgba(16,185,129,0.1);--red-dim:rgba(239,68,68,0.07)}
 html{font-size:16px}
 body{background:var(--bg);color:var(--text);font-family:'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;min-height:100vh;line-height:1.55}
 ::-webkit-scrollbar{width:4px;height:4px}
@@ -61,6 +61,7 @@ header{display:flex;align-items:center;gap:14px;padding:10px 20px;border-bottom:
 .time-block.has-note::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:3px;height:3px;background:rgba(255,255,255,.7);border-radius:50%}
 .topic-input-row{display:flex;gap:6px;margin-top:10px;margin-bottom:8px}
 .topic-input,.search-input,.refl-input,.modal-input{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:7px 10px;color:var(--text);font-size:.82rem;font-family:'Inter',sans-serif;outline:none;transition:border-color .15s}
+.modal-input{min-width:0;width:100%}
 .topic-input{flex:1}.search-input{flex:1}
 .topic-input:focus,.search-input:focus,.refl-input:focus,.modal-input:focus{border-color:var(--amber)}
 .topic-input::placeholder,.search-input::placeholder,.refl-input::placeholder,.modal-input::placeholder{color:var(--text3)}
@@ -117,7 +118,7 @@ header{display:flex;align-items:center;gap:14px;padding:10px 20px;border-bottom:
 .topic-check.revised:hover{border-color:var(--green)}
 .topic-check.revised.checked{background:var(--green);border-color:var(--green)}
 .topic-check.notes-check.checked{background:var(--bg4);border-color:var(--blue)}
-.topic-check.notes-check.checked::after{content:'n';font-size:.8rem;color:var(--blue);font-weight:700}
+.topic-check.notes-check.checked::after{content:'p';font-size:.9rem;line-height:1;color:var(--blue);font-weight:700}
 .check-label{font-size:.65rem;color:var(--text3);text-align:center;line-height:1}
 .topic-checks-group{display:flex;gap:12px;align-items:center}
 .check-col{display:flex;flex-direction:column;align-items:center;gap:2px}
@@ -149,17 +150,35 @@ header{display:flex;align-items:center;gap:14px;padding:10px 20px;border-bottom:
 .subject-card-bar{height:3px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-bottom:4px}
 .subject-card-fill{height:100%;border-radius:99px;transition:width .3s}
 .subject-card-meta{display:flex;justify-content:space-between;align-items:center}
-.subject-card-nums{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--text3)}
+.subject-card-nums{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--text2)}
 .status-badge{font-size:.65rem;font-weight:600;padding:2px 7px;border-radius:99px;letter-spacing:.04em}
-.status-not-started{background:var(--red-dim);color:var(--red)}
+.status-not-started{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
 .status-in-progress{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,166,35,.2)}
 .status-needs-revision{background:var(--red-dim);color:var(--red)}
 .status-strong{background:var(--green-dim);color:var(--green)}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--bg4);border:1px solid var(--border2);border-radius:var(--radius);padding:8px 16px;font-size:.8rem;color:var(--text);opacity:0;transition:all .2s;pointer-events:none;z-index:9999;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-/* Unified color system — one palette for blocks, pills, and legend dots */
-.cat-deep-work{background:#14b8a6!important}.cat-lectures{background:#8b5cf6!important}.cat-revision{background:#3b82f6!important}.cat-break{background:#6b7280!important}.cat-distraction{background:var(--red)!important}.cat-chores{background:#10b981!important}.cat-sleep{background:#312e81!important;border:1px solid #4338ca}
-.cpill-deep-work{background:#14b8a6;color:#0f1117}.cpill-lectures{background:#8b5cf6;color:#e8e8e8}.cpill-revision{background:#3b82f6;color:#0f1117}.cpill-break{background:#6b7280;color:#e8e8e8}.cpill-distraction{background:var(--red);color:#e8e8e8}.cpill-chores{background:#10b981;color:#0f1117}.cpill-sleep{background:#312e81;color:#e8e8e8;border:1px solid #4338ca}
+/* Dark Mode Default Palette */
+.cat-deep-work{background:#2e644c!important}.cat-revision{background:#6cb993!important}.cat-sleep{background:#7633b7!important}.cat-lectures{background:#435ee1!important}.cat-distraction{background:#d63945!important}.cat-chores{background:#9aa3ad!important}.cat-break{background:#ec9b1b!important}
+.cpill-deep-work{background:#2e644c;color:#fff}.cpill-revision{background:#6cb993;color:#111}.cpill-sleep{background:#7633b7;color:#fff}.cpill-lectures{background:#435ee1;color:#fff}.cpill-distraction{background:#d63945;color:#fff}.cpill-chores{background:#9aa3ad;color:#111}.cpill-break{background:#ec9b1b;color:#111}
+
+/* Light Mode Overrides */
+html.light .cat-deep-work{background:#1f7a57!important}
+html.light .cat-revision{background:#6cb993!important}
+html.light .cat-lectures{background:#3450c4!important}
+html.light .cat-break{background:#d97706!important}
+html.light .cat-chores{background:#656d75!important}
+html.light .cpill-deep-work{background:#1f7a57}
+html.light .cpill-revision{background:#6cb993;color:#111}
+html.light .cpill-lectures{background:#3450c4}
+html.light .cpill-break{background:#d97706;color:#fff}
+html.light .cpill-chores{background:#656d75;color:#fff}
+html.light .review-btn, html.light .modal-btn.primary { color: #fff !important; }
+
+.autocomplete-dropdown{position:absolute;bottom:calc(100% + 4px);left:0;right:0;max-height:200px;overflow-y:auto;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);z-index:50;display:none;box-shadow:0 10px 15px -3px rgba(0,0,0,.3)}
+.autocomplete-item{padding:6px 10px;font-size:.78rem;cursor:pointer;border-bottom:1px solid var(--border2);color:var(--text)}
+.autocomplete-item:last-child{border-bottom:none}
+.autocomplete-item:hover{background:var(--bg4)}
 .search-match{background:var(--amber-dim);border-radius:2px}
 #fileInput{display:none}
 [data-tip]{position:relative}
@@ -276,10 +295,10 @@ header{display:flex;align-items:center;gap:14px;padding:10px 20px;border-bottom:
       <div class="legend" id="legend"></div>
       <div style="margin-top:8px">
         <div class="panel-title" style="margin-bottom:5px">Topics Studied</div>
-        <div class="topic-input-row">
-          <input class="topic-input" id="topic-input" list="syllabus-topics-list" placeholder="Add topic… (Enter)" onkeydown="topicKeydown(event)"/>
+        <div class="topic-input-row" style="position:relative">
+          <input class="topic-input" id="topic-input" placeholder="Search and add topics… (Enter)" onkeydown="topicKeydown(event)" oninput="filterTopics()" onfocus="filterTopics()" onblur="setTimeout(()=>document.getElementById('topic-dropdown').style.display='none',200)" autocomplete="off" style="width:100%"/>
           <button class="topic-add-btn" onclick="addTopic()">+</button>
-          <datalist id="syllabus-topics-list"></datalist>
+          <div id="topic-dropdown" class="autocomplete-dropdown"></div>
         </div>
         <div class="topic-tags" id="topic-tags"></div>
       </div>
@@ -304,6 +323,23 @@ header{display:flex;align-items:center;gap:14px;padding:10px 20px;border-bottom:
         <div><div class="refl-label">What could be better</div><textarea class="refl-input" id="refl-better" placeholder="Improvements…" oninput="autoSaveRefl()"></textarea></div>
         <div><div class="refl-label">Tomorrow's focus</div><textarea class="refl-input" id="refl-tomorrow" placeholder="Priorities…" oninput="autoSaveRefl()"></textarea></div>
         <div><div class="refl-label">Day rating</div><div class="star-row" id="star-row"></div></div>
+      </div>
+      
+      <div class="reflection-toggle" id="guide-toggle" onclick="toggleGuide()">
+        <i data-lucide="book-open" style="width:14px;height:14px"></i> Spaced Repetition Guide <i data-lucide="chevron-down" class="chevron" style="width:16px;height:16px;margin-left:auto"></i>
+      </div>
+      <div class="reflection-body" id="guide-body" style="font-size:0.75rem;color:var(--text2);line-height:1.5">
+        <div class="refl-label">1. Initial Learning (Day 0)</div>
+        <div style="margin-bottom:8px">Attend the lecture, mark the topic as <strong>Done</strong> in the Syllabus tab, and log the topic in the "Topics Studied" bar. Your homework tonight isn't to reread notes; practice 10 basic PYQs or DPPs to cement the concepts immediately.</div>
+        
+        <div class="refl-label">2. First Revision (Within 48h)</div>
+        <div style="margin-bottom:8px">Do a quick review of your class notes. Go to the Syllabus Tracker and click the <strong>rev</strong> checkbox. The Self-Assessment modal will classify your confidence (Weak, Shaky, Confident) and automatically schedule your next review date (e.g., 3 days for Shaky).</div>
+        
+        <div class="refl-label">3. The Daily Routine (Active Recall)</div>
+        <div style="margin-bottom:8px">Every day, check the <strong>Due Review</strong> banner. When a topic pops up, revise it using <em>Active Recall</em> without reading your notes. Take a blank paper and explicitly write out the formulas, conceptual rules (like FCFS scheduling), or execute a Gantt chart. Then, attempt a PYQ and hit <strong>rev</strong> again. Your interval will expand dynamically (e.g., 7 days → 14 days → 30 days).</div>
+        
+        <div class="refl-label">4. Strategic Testing</div>
+        <div>Take <strong>Topic-Wise Tests</strong> after your first or second successful spaced repetition cycle (around the 7-day mark) when concepts have settled. Give <strong>Subject-Wise Tests</strong> ONLY when the entire subject shows 0 WEAK topics in the syllabus filter. Log these scores in the Insights panel.</div>
       </div>
     </div>
     <div class="action-bar">
@@ -346,6 +382,7 @@ header{display:flex;align-items:center;gap:14px;padding:10px 20px;border-bottom:
   <!-- PANEL 3: INSIGHTS -->
   <div class="panel insights-panel" id="panel-insights">
     <div class="panel-header"><div class="panel-title">Insights</div></div>
+    <div class="insights-section-title" style="margin-top:14px;margin-bottom:6px"><i data-lucide="calendar" style="width:14px;height:14px;vertical-align:middle;margin-right:4px"></i> Study Hours</div>
     <div class="week-strip" id="week-strip"></div>
     <div class="overall-summary">
       <div class="overall-pct" id="ov-pct">0%</div>
@@ -587,6 +624,8 @@ let filterMode='all';
 let undoStack=[],redoStack=[];
 let modalBlockIdx=null;
 let reflectionOpen=false;
+let guideOpen=false;
+let allTopicsCache=[];
 
 // ── SUPABASE CLOUD SYNC ────────────────────────────────────────────────────────
 const SUPABASE_URL='https://xaicbcmwsgyepvkkxwjh.supabase.co';
@@ -1052,8 +1091,8 @@ function renderCatSelector(){
   const r1=CATEGORIES.slice(0,3).map(c=>`<div class="cat-pill cpill-${c.id}${selectedCat===c.id?' active':''}" onclick="selectCat('${c.id}')" title="[${c.key}] ${c.label}">${c.label}</div>`).join('');
   const r2=CATEGORIES.slice(3).map(c=>`<div class="cat-pill cpill-${c.id}${selectedCat===c.id?' active':''}" onclick="selectCat('${c.id}')" title="[${c.key}] ${c.label}">${c.label}</div>`).join('');
   document.getElementById('cat-selector').innerHTML=
-    `<div style="display:flex;gap:5px;width:100%;margin-bottom:5px">${r1}</div><div style="display:flex;gap:5px;width:100%">${r2}</div>`+
-    `<div class="cat-pill clear-pill${selectedCat===null?' active':''}" style="margin-top:5px;width:100%;text-align:center" onclick="selectCat(null)" title="[X] Clear"><i data-lucide="eraser" style="width:12px;height:12px;vertical-align:middle;margin-right:4px"></i> Clear Block</div>`;
+    `<div style="display:flex;gap:5px;width:100%;margin-bottom:5px;flex-wrap:wrap">${r1}</div>`+
+    `<div style="display:flex;gap:5px;width:100%;flex-wrap:wrap;align-items:center">${r2}<div class="cat-pill clear-pill${selectedCat===null?' active':''}" style="margin-left:auto" onclick="selectCat(null)" title="[X] Clear"><i data-lucide="eraser" style="width:12px;height:12px;vertical-align:middle;margin-right:2px"></i> Clear Block</div></div>`;
   if(window.lucide)lucide.createIcons({root:document.getElementById('cat-selector')});
 }
 
@@ -1111,27 +1150,43 @@ function clearDay(){if(!confirm('Clear all blocks?'))return;pushUndo();saveBlock
 function updateStats(){
   const blocks=getBlocks();let dw=0,study=0,dist=0,logged=0;
   blocks.forEach(b=>{if(!b?.cat)return;logged++;if(b.cat==='deep-work')dw++;if(STUDY_CATS.has(b.cat))study++;if(b.cat==='distraction')dist++;});
-  const toH=n=>{const h=(n*BLOCK_MIN)/60;return h%1===0?`${h}h`:`${h.toFixed(1)}h`;};
-  document.getElementById('stat-dw').textContent=toH(dw);
-  document.getElementById('stat-study').textContent=toH(study);
-  document.getElementById('stat-dist').textContent=toH(dist);
+  const fmtStat=(id,v)=>{const e=document.getElementById(id),h=(v*BLOCK_MIN)/60;e.textContent=h%1===0?`${h}h`:`${h.toFixed(1)}h`;e.style.opacity=h>0?'1':'0.35';};
+  fmtStat('stat-dw',dw);
+  fmtStat('stat-study',study);
+  fmtStat('stat-dist',dist);
   document.getElementById('stat-logged').textContent=`${logged}/48`;
 }
 
 function renderLegend(){
-  document.getElementById('legend').innerHTML=CATEGORIES.map(c=>`<div class="legend-item"><div class="legend-dot cpill-${c.id}"></div>${c.label}</div>`).join('')+`<div class="legend-item">• = note</div>`;
+  document.getElementById('legend').innerHTML=CATEGORIES.map(c=>`<div class="legend-item"><div class="legend-dot cpill-${c.id}"></div>${c.label}</div>`).join('')+`<div class="legend-item">• = pyq</div>`;
 }
 
 // ── TOPICS (today panel) ───────────────────────────────────────────────────────
 function renderTopicTags(){
   document.getElementById('topic-tags').innerHTML=getTopics().map((t,i)=>`<div class="topic-tag">${t}<span class="topic-tag-del" onclick="removeTopic(${i})">×</span></div>`).join('');
 }
-function topicKeydown(e){if(e.key==='Enter')addTopic();}
-function addTopic(){const inp=document.getElementById('topic-input');const v=inp.value.trim();if(!v)return;const t=getTopics();t.push(v);saveTopics(t);inp.value='';renderTopicTags();}
+function filterTopics(){
+  const v=document.getElementById('topic-input').value.toLowerCase().trim();
+  const dd=document.getElementById('topic-dropdown');
+  if(!v){dd.style.display='none';return;}
+  const ms=allTopicsCache.filter(t=>t.toLowerCase().includes(v)).slice(0,8);
+  if(!ms.length){dd.style.display='none';return;}
+  dd.innerHTML=ms.map(t=>`<div class="autocomplete-item" onmousedown="addTopicExact('${t.replace(/'/g,"\\'")}',event)">${t}</div>`).join('');
+  dd.style.display='block';
+}
+function addTopicExact(t,e){
+  e?.preventDefault(); // Keeps input focused
+  const tops=getTopics();tops.push(t);saveTopics(tops);
+  const inp=document.getElementById('topic-input');
+  inp.value='';inp.focus();renderTopicTags();filterTopics();
+}
+function topicKeydown(e){if(e.key==='Enter'){e.preventDefault();addTopic();}}
+function addTopic(){const inp=document.getElementById('topic-input');const v=inp.value.trim();if(!v)return;const t=getTopics();t.push(v);saveTopics(t);inp.value='';renderTopicTags();filterTopics();}
 function removeTopic(i){const t=getTopics();t.splice(i,1);saveTopics(t);renderTopicTags();}
 
 // ── REFLECTION ─────────────────────────────────────────────────────────────────
 function toggleReflection(){reflectionOpen=!reflectionOpen;document.getElementById('refl-toggle').classList.toggle('open',reflectionOpen);document.getElementById('refl-body').classList.toggle('open',reflectionOpen);}
+function toggleGuide(){guideOpen=!guideOpen;document.getElementById('guide-toggle').classList.toggle('open',guideOpen);document.getElementById('guide-body').classList.toggle('open',guideOpen);}
 function renderReflection(){const r=getRefl();document.getElementById('refl-good').value=r.good||'';document.getElementById('refl-better').value=r.better||'';document.getElementById('refl-tomorrow').value=r.tomorrow||'';renderStars(r.rating);}
 function autoSaveRefl(){const r=getRefl();r.good=document.getElementById('refl-good').value;r.better=document.getElementById('refl-better').value;r.tomorrow=document.getElementById('refl-tomorrow').value;saveRefl(r);}
 function renderStars(rating){document.getElementById('star-row').innerHTML=[1,2,3,4,5].map(n=>`<div class="star${n<=rating?' filled':''}" onclick="setRating(${n})">★</div>`).join('');}
@@ -1246,7 +1301,7 @@ function renderTopics(){
           setTopicState(selectedSubject,sect,idx,field,!st[field]);
           renderSyllabus();renderInsights();renderDueRevisions();
         };
-        const lbl=document.createElement('div');lbl.className='check-label';lbl.textContent=field==='done'?'done':field==='revised'?'rev':'note';
+        const lbl=document.createElement('div');lbl.className='check-label';lbl.textContent=field==='done'?'done':field==='revised'?'rev':'pyq';
         col.appendChild(chk);col.appendChild(lbl);checks.appendChild(col);
       });
       row.appendChild(name);row.appendChild(checks);el.appendChild(row);
@@ -1387,10 +1442,9 @@ function migrateOldKeys(){
 }
 
 window.addEventListener('DOMContentLoaded',async()=>{
-  const allTopics=[];
-  Object.values(SYLLABUS.CSE).forEach(s=>Object.values(s).forEach(t=>allTopics.push(...t)));
-  Object.values(SYLLABUS.DA).forEach(s=>Object.values(s).forEach(t=>allTopics.push(...t)));
-  document.getElementById('syllabus-topics-list').innerHTML=[...new Set(allTopics)].map(t=>`<option value="${t.replace(/"/g,'&quot;')}">`).join('');
+  Object.values(SYLLABUS.CSE).forEach(s=>Object.values(s).forEach(t=>allTopicsCache.push(...t)));
+  Object.values(SYLLABUS.DA).forEach(s=>Object.values(s).forEach(t=>allTopicsCache.push(...t)));
+  allTopicsCache=[...new Set(allTopicsCache)];
 
   migrateOldKeys();loadTheme();renderAll();
   document.getElementById('note-modal').addEventListener('click',e=>{if(e.target.id==='note-modal')closeModal();});
