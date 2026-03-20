@@ -609,10 +609,10 @@ const STUDY_CATS=new Set(['deep-work','lectures','revision']);
 const BLOCKS=48,BLOCK_MIN=30;
 const SLEEP_BLOCKS=[...Array(12).keys()];
 const SECTION_LABELS=[
-{label:'🌙 12 AM – 5:30 AM',start:0,count:12},
-{label:'🌤 6 AM – 11:30 AM',start:12,count:12},
-{label:'☀ 12 PM – 5:30 PM',start:24,count:12},
-{label:'🌆 6 PM – 11:30 PM',start:36,count:12},
+{label:'<i data-lucide="moon" style="width:14px;height:14px;vertical-align:middle;margin-right:6px"></i>12 AM – 5:30 AM',start:0,count:12},
+{label:'<i data-lucide="cloud-sun" style="width:14px;height:14px;vertical-align:middle;margin-right:6px"></i>6 AM – 11:30 AM',start:12,count:12},
+{label:'<i data-lucide="sun" style="width:14px;height:14px;vertical-align:middle;margin-right:6px"></i>12 PM – 5:30 PM',start:24,count:12},
+{label:'<i data-lucide="sunset" style="width:14px;height:14px;vertical-align:middle;margin-right:6px"></i>6 PM – 11:30 PM',start:36,count:12},
 ];
 
 // ── STATE ──────────────────────────────────────────────────────────────────────
@@ -1056,9 +1056,9 @@ async function migrateLocalToCloud(){
 
 // ── COUNTDOWN ──────────────────────────────────────────────────────────────────
 function updateCountdown(){
-  const gate=new Date('2027-02-01');
+  const gate=new Date('2027-02-07');
   const diff=Math.ceil((gate-new Date())/86400000);
-  document.getElementById('countdown').textContent=diff>0?`${diff}d to GATE 2027`:'GATE DAY!';
+  document.getElementById('countdown').textContent=diff>0?`${diff} days to GATE 2027`:'GATE DAY!';
 }
 
 // ── STREAM ─────────────────────────────────────────────────────────────────────
@@ -1104,7 +1104,7 @@ function renderTimeGrid(){
   el.innerHTML='';
   SECTION_LABELS.forEach(sec=>{
     const wrap=document.createElement('div');
-    const lbl=document.createElement('div');lbl.className='time-section-label';lbl.textContent=sec.label;wrap.appendChild(lbl);
+    const lbl=document.createElement('div');lbl.className='time-section-label';lbl.innerHTML=sec.label;wrap.appendChild(lbl);
     const grid=document.createElement('div');grid.className='time-grid';
     for(let i=sec.start;i<sec.start+sec.count;i++){
       const b=blocks[i];
@@ -1117,6 +1117,7 @@ function renderTimeGrid(){
     }
     wrap.appendChild(grid);el.appendChild(wrap);
   });
+  if(window.lucide)lucide.createIcons({root:el});
 }
 
 function blockClick(idx){
@@ -1158,7 +1159,7 @@ function updateStats(){
 }
 
 function renderLegend(){
-  document.getElementById('legend').innerHTML=CATEGORIES.map(c=>`<div class="legend-item"><div class="legend-dot cpill-${c.id}"></div>${c.label}</div>`).join('')+`<div class="legend-item">• = pyq</div>`;
+  document.getElementById('legend').innerHTML=CATEGORIES.map(c=>`<div class="legend-item"><div class="legend-dot cpill-${c.id}"></div>${c.label}</div>`).join('');
 }
 
 // ── TOPICS (today panel) ───────────────────────────────────────────────────────
